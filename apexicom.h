@@ -9,11 +9,9 @@
  * is made available for FREE.
  *
  * No warranty is made or implied. You use this program at your own risk.
- */
 
-/*
-  \file serial.h
-  \
+  \file apexicom.h
+  \brief request and receive messages from Apexi PowerFC
   \author Bastian Gschrey & Markus Ippy
  */
 

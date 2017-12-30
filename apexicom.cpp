@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2016 Markus Ippy, Bastian Gschrey, Jan
+ *
+ * Digital Gauges for Apexi Power FC for RX7 on Raspberry Pi
+ *
+ *
+ * This software comes under the GPL (GNU Public License)
+ * You may freely copy,distribute etc. this as long as the source code
+ * is made available for FREE.
+ *
+ * No warranty is made or implied. You use this program at your own risk.
+
+  \file apexicom.c[[
+  \brief request and receive messages from Apexi PowerFC
+  \author Bastian Gschrey & Markus Ippy
+ */
+
 #include "apexicom.h"
 #include "dashboard.h"
 #include "serial.h"

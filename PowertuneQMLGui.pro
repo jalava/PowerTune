@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     gopro.cpp \
     gps.cpp \
     serialobd.cpp \
-    apexicom.cpp
+    apexicom.cpp \
+    adaptroniccom.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,7 +39,8 @@ HEADERS += \
     instrumentcluster.h \
     pids.h \
     serialobd.h \
-    apexicom.h
+    apexicom.h \
+    adaptroniccom.h
 
 FORMS +=
 

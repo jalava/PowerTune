@@ -27,6 +27,7 @@
 #include "gopro.h"
 #include "gps.h"
 #include "apexicom.h"
+#include "adaptroniccom.h"
 #include <QDebug>
 #include <QTime>
 #include <QTimer>
@@ -77,13 +78,10 @@ Serial::Serial(QObject *parent) :
     m_gps(Q_NULLPTR),
     m_obd(Q_NULLPTR),
     m_apexicom(Q_NULLPTR),
-    m_bytesWritten(0),
-    lastRequest(nullptr),
-    modbusDevice(nullptr)
-
-
+    m_adaptroniccom(Q_NULLPTR),
+    m_bytesWritten(0)
 {
-    modbusDevice = new QModbusRtuSerialMaster(this);
+
     getPorts();
     m_dashBoard = new DashBoard(this);
     m_decoder = new Decoder(m_dashBoard, this);
@@ -92,7 +90,7 @@ Serial::Serial(QObject *parent) :
     m_gps = new GPS(m_dashBoard, this);
     m_obd = new SerialOBD(m_dashBoard, this);
     m_apexicom = new ApexiCom(m_decoder,this);
-    connect(m_decoder,SIGNAL(sig_adaptronicReadFinished()),this,SLOT(AdaptronicStartStream()));
+    m_adaptroniccom = new AdaptronicCom(m_decoder,this);
     QQmlApplicationEngine *engine = dynamic_cast<QQmlApplicationEngine*>( parent );
     if (engine == Q_NULLPTR)
         return;
@@ -103,6 +101,7 @@ Serial::Serial(QObject *parent) :
     engine->rootContext()->setContextProperty("GPS", m_gps);
     engine->rootContext()->setContextProperty("OBD", m_obd);
     engine->rootContext()->setContextProperty("ApexiCom", m_apexicom);
+    engine->rootContext()->setContextProperty("AdaptronicCom", m_adaptroniccom);
 }
 
 void Serial::initSerialPort()
@@ -168,24 +167,7 @@ void Serial::openConnection(const QString &portName, const int &ecuSelect, const
     //Adaptronic
     if (ecuSelect == 1)
     {
-
-        if (!modbusDevice)
-            return;
-
-        if (modbusDevice->state() != QModbusDevice::ConnectedState)
-        {
-            modbusDevice->setConnectionParameter(QModbusDevice::SerialPortNameParameter,portName);
-            modbusDevice->setConnectionParameter(QModbusDevice::SerialBaudRateParameter,57600);
-            modbusDevice->setConnectionParameter(QModbusDevice::SerialDataBitsParameter,8);
-            modbusDevice->setConnectionParameter(QModbusDevice::SerialParityParameter,0);
-            modbusDevice->setConnectionParameter(QModbusDevice::SerialStopBitsParameter,1);
-            modbusDevice->setTimeout(200);
-            modbusDevice->setNumberOfRetries(10);
-            modbusDevice->connectDevice();
-
-            Serial::AdaptronicStartStream();
-
-        }
+        m_adaptroniccom->openConnection(portName);
 
     }
     //OBD
@@ -223,7 +205,7 @@ void Serial::closeConnection()
     }
 
     if(ecu == 1){
-        modbusDevice->disconnectDevice();
+        m_adaptroniccom->closeConnection();
     }
     if(ecu == 3){
         m_serialport->close();
@@ -249,22 +231,6 @@ void Serial::update()
 void Serial::readyToRead()
 {
 
-
-    if(ecu == 1)
-    {
-
-        auto reply = qobject_cast<QModbusReply *>(sender());
-        if(!reply)
-            return;
-        if(reply->error() == QModbusDevice::NoError){
-            const QModbusDataUnit unit = reply->result();
-            m_decoder->decodeAdaptronic(unit);
-
-        }
-
-
-
-    }
     if(ecu == 3) //Dicktator ECU
     {
         m_readData = m_serialport->readAll();
@@ -313,22 +279,6 @@ void Serial::dicktatorECU(const QByteArray &buffer)
 
 }
 
-
-// Adaptronic streaming comms
-
-void Serial::AdaptronicStartStream()
-{
-    auto *reply = modbusDevice->sendReadRequest(QModbusDataUnit(QModbusDataUnit::HoldingRegisters, 4096, 21),1); // read first twenty-one realtime values
-    if (!reply->isFinished())
-        connect(reply, &QModbusReply::finished, this,&Serial::readyToRead);
-    else
-        delete reply;
-
-}
-void Serial::AdaptronicStopStream()
-{
-
-}
 
 
 //function for Start Logging

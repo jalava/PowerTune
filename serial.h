@@ -30,6 +30,7 @@ class SerialPort;
 class DashBoard;
 class Decoder;
 class ApexiCom;
+class AdaptronicCom;
 class AppSettings;
 class GoPro;
 class GPS;
@@ -89,6 +90,7 @@ private:
     GPS *m_gps;
     SerialOBD *m_obd;
     ApexiCom *m_apexicom;
+    AdaptronicCom *m_adaptroniccom;
     QStringList m_portsNames;
     QStringList *m_ecuList;
     qint64      m_bytesWritten;
@@ -118,7 +120,6 @@ signals:
 
 public slots:
     void readyToRead();
-    void AdaptronicStartStream();
     void dicktatorECU(const QByteArray &buffer);
 
     void setPortsNames(QStringList portsNames)
