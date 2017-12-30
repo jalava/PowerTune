@@ -44,7 +44,7 @@ ApplicationWindow {
         }
         Loader {
             id: testLoader
-            source: "qrc:/Gauges/DynamicDash.qml"
+            source: "qrc:/Gauges/MapTracer.qml"
         }
 
         Item {
