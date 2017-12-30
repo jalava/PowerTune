@@ -218,6 +218,9 @@ void Serial::openConnection(const QString &portName, const int &ecuSelect, const
 }
 void Serial::closeConnection()
 {
+    if(ecu == 0){
+        m_apexicom->closeConnection();
+    }
 
     if(ecu == 1){
         modbusDevice->disconnectDevice();
