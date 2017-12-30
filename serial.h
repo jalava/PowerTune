@@ -23,17 +23,28 @@
 #include <QObject>
 #include <QModbusDataUnit>
 #include <QTimer>
+#include <QThread>
 
 
 class SerialPort;
 class DashBoard;
 class Decoder;
+class ApexiCom;
 class AppSettings;
 class GoPro;
 class GPS;
 class SerialOBD;
 class QModbusClient;
 class QModbusReply;
+
+namespace SERIAL {
+    namespace DATA {
+        enum ENUM {
+            Advance=0xF0
+        };
+    }
+}
+
 
 class Serial : public QObject
 {
@@ -76,6 +87,7 @@ private:
     GoPro *m_gopro;
     GPS *m_gps;
     SerialOBD *m_obd;
+    ApexiCom *m_apexicom;
     QStringList m_portsNames;
     QStringList *m_ecuList;
     qint64      m_bytesWritten;
@@ -103,17 +115,8 @@ signals:
 
 public slots:
     void readyToRead();
-    void handleTimeout();
-    void handleBytesWritten(qint64 bytes);
-    void handleError(QSerialPort::SerialPortError error);
     void AdaptronicStartStream();
     void dicktatorECU(const QByteArray &buffer);
-    void apexiECU(const QByteArray &buffer);
-
-
-
-        //void openConnection(SerialSetting::Settings p); //open serial connection with settings
-    void sendRequest(int requestIndex);
 
     void setPortsNames(QStringList portsNames)
     {
@@ -123,7 +126,7 @@ public slots:
         m_portsNames = portsNames;
         emit sig_portsNamesChanged(portsNames);
     }
-    void readData(QByteArray serialdata);
+    //void readData(QByteArray serialdata);
 
 
 };
