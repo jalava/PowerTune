@@ -45,14 +45,14 @@ private:
     QModbusDataUnit readRequest() const;
 
 signals:
-    void readyToRead();
+
     void sig_finished();
     void sig_error(QString err);
     void start();
 
 
 public slots:
-
+    void readyToRead();
     void AdaptronicStartStream();
 
 };

@@ -45,6 +45,7 @@ void AdaptronicCom::initSerialPort()
 void AdaptronicCom::openConnection(const QString &portName)
 {
 
+    qDebug() <<("Opening Port Adaptronic");
 
     {
 

@@ -240,6 +240,7 @@ void Serial::readyToRead()
 
 }
 
+
 void Serial::dicktatorECU(const QByteArray &buffer)
 {
     //Appending the message until the patterns Start and End Are found , then removing all bytes before and after the message
