@@ -27,7 +27,7 @@ QByteArray recvchecksumh;
 ApexiCom::ApexiCom(QObject *parent)
     : QObject(parent),
       m_serial(Q_NULLPTR),
-     // m_decoder(Q_NULLPTR),
+      m_decoder(Q_NULLPTR),
       m_bytesWritten(0)
       //m_dashboard(Q_NULLPTR)
 
@@ -35,7 +35,11 @@ ApexiCom::ApexiCom(QObject *parent)
 
 }
 
-
+ApexiCom::ApexiCom(Decoder *decoder, QObject *parent)
+    : QObject(parent)
+    , m_decoder(decoder)
+{
+}
 
 
 void ApexiCom::initSerialPort()
@@ -233,9 +237,9 @@ void ApexiCom::readData(QByteArray serialdata)
             if(requesttype == 0x92){m_decoder->decodeInjPriLagvsBattV(serialdata);}
             if(requesttype == 0x9F){m_decoder->decodeInjScLagvsBattV(serialdata);}
             if(requesttype == 0x8D){m_decoder->decodeFuelInjectors(serialdata);}
-        }
+
+       }
         serialdata.clear();
-        \
 
     }
 

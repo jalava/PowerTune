@@ -53,6 +53,7 @@ class Serial : public QObject
 
 public:
     ~Serial();
+
     explicit Serial(QObject *parent = 0);
 
     Q_INVOKABLE void clear() const;
@@ -99,6 +100,7 @@ private:
     QByteArray  m_dicktatorMsg;
     QByteArray  m_apexiMsg;
     QByteArray  m_writeData;
+    QThread* thread;
 
     //QModbusReply reply;
 
@@ -110,6 +112,7 @@ signals:
     void sig_error(QString err);
     void sig_ApexiDataAvailable(QByteArray);
     void sig_portsNamesChanged(QStringList portsNames);
+    void start();
 
 
 

@@ -62,7 +62,6 @@ private:
    // DashBoard *m_dashboard;
     SerialPort *m_serial;
     Decoder *m_decoder;
-    QStringList m_portsNames;
     QStringList *m_ecuList;
     qint64      m_bytesWritten;
     QByteArray  m_readData;

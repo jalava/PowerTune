@@ -91,7 +91,7 @@ Serial::Serial(QObject *parent) :
     m_gopro = new GoPro(this);
     m_gps = new GPS(m_dashBoard, this);
     m_obd = new SerialOBD(m_dashBoard, this);
-    m_apexicom = new ApexiCom(this);
+    m_apexicom = new ApexiCom(m_decoder,this);
     connect(m_decoder,SIGNAL(sig_adaptronicReadFinished()),this,SLOT(AdaptronicStartStream()));
     QQmlApplicationEngine *engine = dynamic_cast<QQmlApplicationEngine*>( parent );
     if (engine == Q_NULLPTR)
