@@ -47,7 +47,7 @@ void AdaptronicCom::openConnection(const QString &portName)
 
     qDebug() <<("Opening Port Adaptronic");
 
-    {
+     {
 
         if (!modbusDevice)
             return;
@@ -62,10 +62,10 @@ void AdaptronicCom::openConnection(const QString &portName)
             modbusDevice->setTimeout(200);
             modbusDevice->setNumberOfRetries(10);
             modbusDevice->connectDevice();
-
+            qDebug() <<("Connected");
             AdaptronicCom::AdaptronicStartStream();
 
-        }
+       }
 
     }
 

@@ -147,6 +147,10 @@ DashBoard::DashBoard(QObject *parent)
   //units
     , m_units("unit")
 
+  //Map Position
+    , m_mapPos(0)
+
+
 {
 }
 
@@ -1087,9 +1091,15 @@ void DashBoard::setTRIM(const qreal &TRIM)
 }
 
 
-// GPS
+// Map Position
 
-
+ void DashBoard::setmapPos(const qreal &mapPos)
+ {
+     if (m_mapPos == mapPos)
+         return;
+     m_mapPos= mapPos;
+     emit mapPosChanged(mapPos);
+ }
 
 
 // Odometer
@@ -1216,6 +1226,10 @@ QString DashBoard::gpsVisibleSatelites () const { return m_gpsVisibleSatelites; 
 
 //units
 QString DashBoard::units() const { return m_units; }
+
+//Map Position
+
+qreal DashBoard::mapPos() const { return m_mapPos; }
 
 
 //Adaptronic extra

@@ -120,6 +120,13 @@ class DashBoard : public QObject
     Q_PROPERTY(QString SerialStat READ SerialStat WRITE setSerialStat NOTIFY SerialStatChanged)
 
 
+    // Map Position
+
+    Q_PROPERTY(qreal mapPos READ mapPos WRITE setmapPos NOTIFY mapPosChanged)
+
+
+
+
     //Adaptronic extra
 
     Q_PROPERTY(qreal MAP READ MAP WRITE setMAP NOTIFY MAPChanged)
@@ -289,7 +296,8 @@ public:
     // Units
     void setunits(const QString &units);
 
-
+    // Map Position
+    void setmapPos(const qreal &mapPos);
 
 
 
@@ -443,6 +451,8 @@ public:
 //units
     QString units() const;
 
+// Map Position
+      qreal mapPos() const;
 
     //Adaptronic extra
 
@@ -592,6 +602,10 @@ signals:
     void gpsVisibleSatelitesChanged(QString gpsVisibleSatelites);
 
     // units
+
+    // Map Position
+    void mapPosChanged(qreal mapPos);
+
 
     void unitsChanged(QString units);
 
@@ -772,5 +786,7 @@ private:
 
     QString m_units;
 
+    // Map Position
+    qreal m_mapPos;
 
 };

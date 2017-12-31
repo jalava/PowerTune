@@ -40,7 +40,7 @@ int auxval1;
 int auxval2;
 int auxval3;
 int auxval4;
-
+int mapposqml;
 
 
 double mul[80] = FC_INFO_MUL;  // required values for calculation from raw to readable values for Advanced Sensor info
@@ -430,10 +430,14 @@ void Decoder::decodeMap(QByteArray serialdata)
     packageMap[0] = mul[0] * info->Map_N + add[0];
     packageMap[1] = mul[0] * info->Map_P + add[0];
 
-    //    ui->txtMapConsole->clear();
+    //Calculate the Position in the MapTracer QML
+    if (packageMap[1] > 1)
+    {mapposqml = (packageMap[1]*20+packageMap[0]-1);}
+    else
+    {mapposqml = (packageMap[0]-1);}
 
-    //    ui->txtMapConsole->append(map[66] + " " + QString::number(packageMap[0]));
-    //    ui->txtMapConsole->append(map[67] + " " + QString::number(packageMap[1]));
+    m_dashboard->setmapPos(mapposqml);
+
 }
 void Decoder::decodeBasic(QByteArray serialdata)
 {

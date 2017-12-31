@@ -1,7 +1,9 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.1
 
-    Rectangle {
+
+Rectangle {
+    property  int position: Dashboard.mapPos
     id: root
     anchors.fill: parent
     Grid{
@@ -14,23 +16,21 @@ import QtQuick.Controls 2.1
             id: repeat
             model: 400
             Rectangle {
+                id: rect
                 width: parent.width/25; height: parent.height /25
                 color: "lightsteelblue"
                 border.color: "black"
 
-                // This is  just to test how to change the rectangles at certain positions in the grid has to be replaced by Map Position
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
+                states: State {
+                    name: "active"; when: position.valueOf() >= 1
+                    PropertyChanges { target: repeat.itemAt(position.valueOf()).color = "blue"}
+                }
 
-                        {repeat.itemAt(10).color = "red"}
-                        {repeat.itemAt(5).color = "green"}
+//{repeat.itemAt(10).color = "red"}
+
+
             }
         }
-
-
-}
+        //
     }
-//
-}
 }
