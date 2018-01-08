@@ -19,7 +19,10 @@ SOURCES += main.cpp \
     serialobd.cpp \
     apexicom.cpp \
     adaptroniccom.cpp \
-    nissanconsultcom.cpp
+    nissanconsultcom.cpp \
+    decoderapexi.cpp \
+    decoderadaptronic.cpp \
+    decodernissanconsult.cpp
 
 RESOURCES += qml.qrc
 
@@ -42,7 +45,10 @@ HEADERS += \
     serialobd.h \
     apexicom.h \
     adaptroniccom.h \
-    nissanconsultcom.h
+    nissanconsultcom.h \
+    decoderapexi.h \
+    decoderadaptronic.h \
+    decodernissanconsult.h
 
 FORMS +=
 

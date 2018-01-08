@@ -36,8 +36,6 @@
 
 int reqquestInd = 0; //ID for requested data type Power FC
 int ExpectedBytes;
-//int Bytes;
-//QString Logfilename;
 QByteArray checksumh;
 QByteArray recvchecksumh;
 
@@ -46,7 +44,6 @@ ApexiCom::ApexiCom(QObject *parent)
       m_serial(Q_NULLPTR),
       m_decoder(Q_NULLPTR),
       m_bytesWritten(0)
-      //m_dashboard(Q_NULLPTR)
 
 {
 
