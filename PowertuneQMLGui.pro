@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     gps.cpp \
     serialobd.cpp \
     apexicom.cpp \
-    adaptroniccom.cpp
+    adaptroniccom.cpp \
+    nissanconsultcom.cpp
 
 RESOURCES += qml.qrc
 
@@ -40,7 +41,8 @@ HEADERS += \
     pids.h \
     serialobd.h \
     apexicom.h \
-    adaptroniccom.h
+    adaptroniccom.h \
+    nissanconsultcom.h
 
 FORMS +=
 

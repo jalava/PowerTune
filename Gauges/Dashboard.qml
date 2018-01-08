@@ -176,6 +176,7 @@ Item {
                 id: leftgaugeticks
                 height: parent.height
                 width: height
+                opacity: 0.5
                 value: Dashboard.Watertemp
                 anchors.verticalCenter: parent.verticalCenter
                 minimumValue: 30

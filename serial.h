@@ -38,14 +38,6 @@ class SerialOBD;
 class QModbusClient;
 class QModbusReply;
 
-namespace SERIAL {
-    namespace DATA {
-        enum ENUM {
-            Advance=0xF0
-        };
-    }
-}
-
 
 class Serial : public QObject
 {
@@ -53,7 +45,7 @@ class Serial : public QObject
     Q_PROPERTY(QStringList portsNames READ portsNames WRITE setPortsNames NOTIFY sig_portsNamesChanged)
 
 public:
-    ~Serial();
+   // ~Serial();
 
     explicit Serial(QObject *parent = 0);
 

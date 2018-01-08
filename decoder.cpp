@@ -19,7 +19,7 @@
 #include <QThread>
 
 
-
+int test =1;
 int units;// 0 Metric / 1 Imperial
 QByteArray serialdata;
 QByteArray fullFuelBase;
@@ -431,11 +431,13 @@ void Decoder::decodeMap(QByteArray serialdata)
     packageMap[1] = mul[0] * info->Map_P + add[0];
 
     //Calculate the Position in the MapTracer QML
+   /*
     if (packageMap[1] > 1)
     {mapposqml = (packageMap[1]*20+packageMap[0]-1);}
     else
     {mapposqml = (packageMap[0]-1);}
-
+    */
+    mapposqml=mapposqml +1;
     m_dashboard->setmapPos(mapposqml);
 
 }

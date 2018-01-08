@@ -59,7 +59,7 @@ QByteArray recvchecksumhex;
 
 
 
-
+/*
 Serial::~Serial()
 {
 
@@ -68,6 +68,7 @@ Serial::~Serial()
     delete modbusDevice;
 
 }
+*/
 
 Serial::Serial(QObject *parent) :
     QObject(parent),

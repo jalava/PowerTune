@@ -26,8 +26,6 @@ Rectangle {
                     PropertyChanges { target: repeat.itemAt(position.valueOf()).color = "blue"}
                 }
 
-//{repeat.itemAt(10).color = "red"}
-
 
             }
         }
