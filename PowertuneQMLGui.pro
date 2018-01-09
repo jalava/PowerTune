@@ -11,7 +11,6 @@ static {
 SOURCES += main.cpp \
     serial.cpp \
     dashboard.cpp \
-    decoder.cpp \
     serialport.cpp \
     appsettings.cpp \
     gopro.cpp \
@@ -35,7 +34,6 @@ include(deployment.pri)
 HEADERS += \
     serial.h \
     dashboard.h \
-    decoder.h \
     serialport.h \
     appsettings.h \
     gopro.h \

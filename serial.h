@@ -28,7 +28,8 @@
 
 class SerialPort;
 class DashBoard;
-class Decoder;
+class DecoderApexi;
+class DecoderAdaptronic;
 class ApexiCom;
 class AdaptronicCom;
 class AppSettings;
@@ -75,7 +76,8 @@ public:
 
 private:
     SerialPort *m_serialport;
-    Decoder *m_decoder;
+    DecoderApexi *m_decoderapexi;
+    DecoderAdaptronic *m_decoderadaptronic;
     DashBoard *m_dashBoard;
     AppSettings *m_appSettings;
     GoPro *m_gopro;

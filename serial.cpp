@@ -20,7 +20,8 @@
 
 #include "serial.h"
 #include "serialobd.h"
-#include "decoder.h"
+#include "decoderapexi.h"
+#include "decoderadaptronic.h"
 #include "dashboard.h"
 #include "serialport.h"
 #include "appsettings.h"
@@ -73,7 +74,8 @@ Serial::~Serial()
 Serial::Serial(QObject *parent) :
     QObject(parent),
     m_serialport(Q_NULLPTR),
-    m_decoder(Q_NULLPTR),
+    m_decoderapexi(Q_NULLPTR),
+    m_decoderadaptronic(Q_NULLPTR),
     m_dashBoard(Q_NULLPTR),
     m_gopro(Q_NULLPTR),
     m_gps(Q_NULLPTR),
@@ -85,18 +87,18 @@ Serial::Serial(QObject *parent) :
 
     getPorts();
     m_dashBoard = new DashBoard(this);
-    m_decoder = new Decoder(m_dashBoard, this);
     m_appSettings = new AppSettings(this);
     m_gopro = new GoPro(this);
     m_gps = new GPS(m_dashBoard, this);
     m_obd = new SerialOBD(m_dashBoard, this);
-    m_apexicom = new ApexiCom(m_decoder,this);
-    m_adaptroniccom = new AdaptronicCom(m_decoder,this);
+    m_apexicom = new ApexiCom(m_decoderapexi,this);
+    m_adaptroniccom = new AdaptronicCom(m_decoderadaptronic,this);
     QQmlApplicationEngine *engine = dynamic_cast<QQmlApplicationEngine*>( parent );
     if (engine == Q_NULLPTR)
         return;
     engine->rootContext()->setContextProperty("Dashboard", m_dashBoard);
-    engine->rootContext()->setContextProperty("Decoder", m_decoder);
+    engine->rootContext()->setContextProperty("DecoderApexi", m_decoderapexi);
+    engine->rootContext()->setContextProperty("DecoderAdaptronic", m_decoderadaptronic);
     engine->rootContext()->setContextProperty("AppSettings", m_appSettings);
     engine->rootContext()->setContextProperty("GoPro", m_gopro);
     engine->rootContext()->setContextProperty("GPS", m_gps);
@@ -274,7 +276,7 @@ void Serial::dicktatorECU(const QByteArray &buffer)
         {
             m_dicktatorMsg = m_buffer;
             m_buffer.clear();
-            m_decoder->decodeDicktator(m_dicktatorMsg);
+            //m_decoder->decodeDicktator(m_dicktatorMsg);
             break;
         }
     }
@@ -291,7 +293,7 @@ void Serial::startLogging(const QString &logfilenameSelect, const int &loggeron)
     if (ecu == 0)    //Apexi
     {
         {
-            m_decoder->loggerApexi(Logfilename);
+            m_decoderapexi->loggerApexi(Logfilename);
         }
     }
     if (ecu == 1)    //Adaptronic
@@ -305,8 +307,8 @@ void Serial::startLogging(const QString &logfilenameSelect, const int &loggeron)
             stream << "Time (s),RPM,MAP (kPa),MAT (°C),WT (°C),AuxT (°C),AFR,Knock,TPS %,Idle,MVSS (km/h),SVSS (km/h),Batt (V),Inj 1 (ms), Inj 2 (ms),Inj 3 (ms),Inj 4 (ms),Ign 1 (°),Ign 2 (°),Ign 3 (°),Ign 4 (°),Trim" << endl;
         }
         file.close();
-        m_decoder->loggerAdaptronic(Logfilename);
-        m_decoder->loggerActivationstatus(loggingstatus);
+       // m_decoder->loggerAdaptronic(Logfilename);
+       // m_decoder->loggerActivationstatus(loggingstatus);
     }
 
 
@@ -317,7 +319,7 @@ void Serial::startLogging(const QString &logfilenameSelect, const int &loggeron)
 void Serial::stopLogging(const int &loggeron)
 {
     loggingstatus = loggeron;
-    m_decoder->loggerActivationstatus(loggingstatus);
+    //m_decoder->loggerActivationstatus(loggingstatus);
     return;
 }
 
@@ -331,7 +333,7 @@ void Serial::Auxcalc (const QString &unitaux1,const int &an1V0,const int &an2V5,
     QString Auxunit1 = unitaux1;
     QString Auxunit2 = unitaux2;
 
-    m_decoder->calculatorAux(aux1min,aux2max,aux3min,aux4max,Auxunit1,Auxunit2);
+    m_decoderapexi->calculatorAux(aux1min,aux2max,aux3min,aux4max,Auxunit1,Auxunit2);
 }
 
 

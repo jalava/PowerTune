@@ -40,7 +40,7 @@ namespace APEXI {
 
 class DashBoard;
 class SerialPort;
-class Decoder;
+class DecoderApexi;
 
 
 
@@ -50,7 +50,7 @@ class ApexiCom : public QObject
 public:
 
     explicit ApexiCom(QObject *parent = 0);
-    explicit ApexiCom(Decoder *m_decoder, QObject *parent = 0);
+    explicit ApexiCom(DecoderApexi *m_decoderapexi, QObject *parent = 0);
     Q_INVOKABLE void clear() const;
     Q_INVOKABLE void initSerialPort();
     Q_INVOKABLE void openConnection(const QString &portName);
@@ -63,9 +63,9 @@ public:
     void writeRequestPFC(QByteArray);
 
 private:
-   // DashBoard *m_dashboard;
+    DashBoard *m_dashboard;
     SerialPort *m_serial;
-    Decoder *m_decoder;
+    DecoderApexi *m_decoderapexi;
     QStringList *m_ecuList;
     qint64      m_bytesWritten;
     QByteArray  m_readData;

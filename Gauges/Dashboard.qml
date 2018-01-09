@@ -113,6 +113,7 @@ Item {
             Text {
                 id: value1label
                 text:"AFR"
+                opacity: 0.5
                 font.pixelSize: scalerect.width / 55
                 anchors.left: parent.left
                 anchors.leftMargin: scalerect.width / 26
@@ -125,6 +126,7 @@ Item {
             Text {
                 id: value1
                 text: (Dashboard.auxcalc1).toFixed(1)
+                opacity: 0.5
                 font.pixelSize: scalerect.width / 55
                 anchors.right: parent.right
                 anchors.rightMargin: scalerect.width / 26
@@ -137,6 +139,7 @@ Item {
             Text {
                 id: value2label
                 text:"Boost"
+                opacity: 0.5
                 font.pixelSize: scalerect.width / 55
                 anchors.bottom: value1label.top
                 anchors.left: parent.left
@@ -149,6 +152,7 @@ Item {
             Text {
                 id: value2
                 text:(Dashboard.pim).toFixed(2)
+                opacity: 0.5
                 font.pixelSize: scalerect.width / 55
                 anchors.right: parent.right
                 anchors.rightMargin: scalerect.width / 26
@@ -224,6 +228,7 @@ Item {
                 id: rightgaugeticks
                 height: parent.height
                 width: height
+                opacity: 0.5
                 value: Dashboard.Intaketemp
                 anchors.verticalCenter: parent.verticalCenter
                 minimumValue: 20
@@ -287,7 +292,7 @@ Item {
                 id: speedometer
                 height: parent.height
                 width: height
-
+                opacity: 0.5
                 value: Dashboard.speed
                 anchors.verticalCenter: parent.verticalCenter
                 maximumValue: 320
@@ -303,6 +308,7 @@ Item {
             // Speedo Needle animation
             GaugeNeedle_minus180to90  {
                 id: speedoNeedle
+                opacity: 0.5
                 anchors.verticalCenterOffset: 0
                 anchors.centerIn: parent
                 value: Dashboard.speed / 4.155844155844156
@@ -315,6 +321,7 @@ Item {
             id: revcounter
             height: scalerect.height /2.08 //230
             width: height
+            opacity: 0.5
             anchors.top: scalerect.top
             anchors.topMargin: scalerect.height / 3.69
             anchors.right: scalerect.right
@@ -344,7 +351,7 @@ Item {
 
             GaugeNeedle_minus90to180  {
                 id: revneedele
-
+                opacity: 0.5
                 anchors.verticalCenterOffset: 0
                 anchors.centerIn: parent
                 value: Dashboard.revs *0.0077

@@ -18,7 +18,7 @@
 #include "apexicom.h"
 #include "dashboard.h"
 #include "serial.h"
-#include "decoder.h"
+#include "decoderapexi.h"
 #include "serialport.h"
 #include "appsettings.h"
 #include <QDebug>
@@ -34,6 +34,8 @@
 #include <QByteArrayMatcher>
 #include <QProcess>
 
+
+
 int reqquestInd = 0; //ID for requested data type Power FC
 int ExpectedBytes;
 QByteArray checksumh;
@@ -42,16 +44,16 @@ QByteArray recvchecksumh;
 ApexiCom::ApexiCom(QObject *parent)
     : QObject(parent),
       m_serial(Q_NULLPTR),
-      m_decoder(Q_NULLPTR),
+      m_decoderapexi(Q_NULLPTR),
       m_bytesWritten(0)
 
 {
 
 }
 
-ApexiCom::ApexiCom(Decoder *decoder, QObject *parent)
+ApexiCom::ApexiCom(DecoderApexi *decoderapexi, QObject *parent)
     : QObject(parent)
-    , m_decoder(decoder)
+    , m_decoderapexi(decoderapexi)
 {
 }
 
@@ -203,54 +205,54 @@ void ApexiCom::readData(QByteArray serialdata)
         //Write all OK Serial Messages to a file
         if(serialdata[1] + 1 == serialdata.length())
         {
-
+/*
             switch (requesttype) {
             case APEXI::DATA::Advance:
-                m_decoder->decodeAdv(serialdata);
+                m_decoderapexi->decodeAdv(serialdata);
                 break;
             default:
                 break;
             }
+*/
 
+            if(requesttype == APEXI::DATA::Advance) {m_decoderapexi->decodeAdv(serialdata);}
+            if(requesttype == 0xDD){m_decoderapexi->decodeSensorStrings(serialdata);}
+            if(requesttype == 0xDE){m_decoderapexi->decodeSensor(serialdata);}
+            if(requesttype == 0x00){m_decoderapexi->decodeAux(serialdata);}
+            if(requesttype == 0x00){m_decoderapexi->decodeAux2(serialdata);}
+            if(requesttype == 0xDB){m_decoderapexi->decodeMap(serialdata);}
+            if(requesttype == 0xDA){m_decoderapexi->decodeBasic(serialdata);}
+            if(requesttype == 0xB8){m_decoderapexi->decodeRevIdle(serialdata);}
+            if(requesttype == 0x7D){m_decoderapexi->decodeTurboTrans(serialdata);}
+            if(requesttype == 0x76){m_decoderapexi->decodeLeadIgn(serialdata, 0);}
+            if(requesttype == 0x77){m_decoderapexi->decodeLeadIgn(serialdata, 5);}
+            if(requesttype == 0x78){m_decoderapexi->decodeLeadIgn(serialdata, 10);}
+            if(requesttype == 0x79){m_decoderapexi->decodeLeadIgn(serialdata, 15);}
+            if(requesttype == 0x81){m_decoderapexi->decodeTrailIgn(serialdata, 0);}
+            if(requesttype == 0x82){m_decoderapexi->decodeTrailIgn(serialdata, 5);}
+            if(requesttype == 0x83){m_decoderapexi->decodeTrailIgn(serialdata, 10);}
+            if(requesttype == 0x84){m_decoderapexi->decodeTrailIgn(serialdata, 15);}
+            if(requesttype == 0x86){m_decoderapexi->decodeInjcorr(serialdata, 0);}
+            if(requesttype == 0x87){m_decoderapexi->decodeInjcorr(serialdata, 5);}
+            if(requesttype == 0x88){m_decoderapexi->decodeInjcorr(serialdata, 10);}
+            if(requesttype == 0x89){m_decoderapexi->decodeInjcorr(serialdata, 15);}
 
-            if(requesttype == APEXI::DATA::Advance) {m_decoder->decodeAdv(serialdata);}
-            if(requesttype == 0xDD){m_decoder->decodeSensorStrings(serialdata);}
-            if(requesttype == 0xDE){m_decoder->decodeSensor(serialdata);}
-            if(requesttype == 0x00){m_decoder->decodeAux(serialdata);}
-            if(requesttype == 0x00){m_decoder->decodeAux2(serialdata);}
-            if(requesttype == 0xDB){m_decoder->decodeMap(serialdata);}
-            if(requesttype == 0xDA){m_decoder->decodeBasic(serialdata);}
-            if(requesttype == 0xB8){m_decoder->decodeRevIdle(serialdata);}
-            if(requesttype == 0x7D){m_decoder->decodeTurboTrans(serialdata);}
-            if(requesttype == 0x76){m_decoder->decodeLeadIgn(serialdata, 0);}
-            if(requesttype == 0x77){m_decoder->decodeLeadIgn(serialdata, 5);}
-            if(requesttype == 0x78){m_decoder->decodeLeadIgn(serialdata, 10);}
-            if(requesttype == 0x79){m_decoder->decodeLeadIgn(serialdata, 15);}
-            if(requesttype == 0x81){m_decoder->decodeTrailIgn(serialdata, 0);}
-            if(requesttype == 0x82){m_decoder->decodeTrailIgn(serialdata, 5);}
-            if(requesttype == 0x83){m_decoder->decodeTrailIgn(serialdata, 10);}
-            if(requesttype == 0x84){m_decoder->decodeTrailIgn(serialdata, 15);}
-            if(requesttype == 0x86){m_decoder->decodeInjcorr(serialdata, 0);}
-            if(requesttype == 0x87){m_decoder->decodeInjcorr(serialdata, 5);}
-            if(requesttype == 0x88){m_decoder->decodeInjcorr(serialdata, 10);}
-            if(requesttype == 0x89){m_decoder->decodeInjcorr(serialdata, 15);}
+            if(requesttype == 0xB0){m_decoderapexi->decodeFuelBase(serialdata, 0);}
+            if(requesttype == 0xB1){m_decoderapexi->decodeFuelBase(serialdata, 1);}
+            if(requesttype == 0xB2){m_decoderapexi->decodeFuelBase(serialdata, 2);}
+            if(requesttype == 0xB3){m_decoderapexi->decodeFuelBase(serialdata, 3);}
+            if(requesttype == 0xB4){m_decoderapexi->decodeFuelBase(serialdata, 4);}
+            if(requesttype == 0xB5){m_decoderapexi->decodeFuelBase(serialdata, 5);}
+            if(requesttype == 0xB6){m_decoderapexi->decodeFuelBase(serialdata, 6);}
+            if(requesttype == 0xB7){m_decoderapexi->decodeFuelBase(serialdata, 7);}
 
-            if(requesttype == 0xB0){m_decoder->decodeFuelBase(serialdata, 0);}
-            if(requesttype == 0xB1){m_decoder->decodeFuelBase(serialdata, 1);}
-            if(requesttype == 0xB2){m_decoder->decodeFuelBase(serialdata, 2);}
-            if(requesttype == 0xB3){m_decoder->decodeFuelBase(serialdata, 3);}
-            if(requesttype == 0xB4){m_decoder->decodeFuelBase(serialdata, 4);}
-            if(requesttype == 0xB5){m_decoder->decodeFuelBase(serialdata, 5);}
-            if(requesttype == 0xB6){m_decoder->decodeFuelBase(serialdata, 6);}
-            if(requesttype == 0xB7){m_decoder->decodeFuelBase(serialdata, 7);}
-
-            if(requesttype == 0xF5){m_decoder->decodeVersion(serialdata);}
-            if(requesttype == 0xF3){m_decoder->decodeInit(serialdata);}
-            if(requesttype == 0xAB){m_decoder->decodeBoostCont(serialdata);}
-            if(requesttype == 0x7B){m_decoder->decodeInjOverlap(serialdata);}
-            if(requesttype == 0x92){m_decoder->decodeInjPriLagvsBattV(serialdata);}
-            if(requesttype == 0x9F){m_decoder->decodeInjScLagvsBattV(serialdata);}
-            if(requesttype == 0x8D){m_decoder->decodeFuelInjectors(serialdata);}
+            if(requesttype == 0xF5){m_decoderapexi->decodeVersion(serialdata);}
+            if(requesttype == 0xF3){m_decoderapexi->decodeInit(serialdata);}
+            if(requesttype == 0xAB){m_decoderapexi->decodeBoostCont(serialdata);}
+            if(requesttype == 0x7B){m_decoderapexi->decodeInjOverlap(serialdata);}
+            if(requesttype == 0x92){m_decoderapexi->decodeInjPriLagvsBattV(serialdata);}
+            if(requesttype == 0x9F){m_decoderapexi->decodeInjScLagvsBattV(serialdata);}
+            if(requesttype == 0x8D){m_decoderapexi->decodeFuelInjectors(serialdata);}
 
        }
         serialdata.clear();

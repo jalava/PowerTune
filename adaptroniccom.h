@@ -23,7 +23,7 @@
 
 class DashBoard;
 class SerialPort;
-class Decoder;
+class DecoderAdaptronic;
 class QModbusClient;
 class QModbusReply;
 
@@ -31,15 +31,16 @@ class AdaptronicCom : public QObject
 {
     Q_OBJECT
 public:
+    ~AdaptronicCom();
     explicit AdaptronicCom(QObject *parent = 0);
-    explicit AdaptronicCom(Decoder *m_decoder, QObject *parent = 0);
+    explicit AdaptronicCom(DecoderAdaptronic *m_decoderadaptronic, QObject *parent = 0);
    // Q_INVOKABLE void clear() const;
     Q_INVOKABLE void initSerialPort();
     Q_INVOKABLE void openConnection(const QString &portName);
     Q_INVOKABLE void closeConnection();
 private:
     SerialPort *m_serialadaptronic;
-    Decoder *m_decoder;
+    DecoderAdaptronic *m_decoderadaptronic;
     QModbusReply *lastRequest;
     QModbusClient *modbusDevice;
     QModbusDataUnit readRequest() const;
@@ -54,6 +55,7 @@ signals:
 public slots:
     void readyToRead();
     void AdaptronicStartStream();
+  //  void readData(QByteArray serialdata);
 
 };
 

@@ -1,7 +1,7 @@
 #include "adaptroniccom.h"
 #include "serial.h"
 #include "serialport.h"
-#include "decoder.h"
+#include "decoderadaptronic.h"
 #include "appsettings.h"
 #include <QDebug>
 #include <QThread>
@@ -10,22 +10,31 @@
 #include <QModbusRtuSerialMaster>
 
 
+AdaptronicCom::~AdaptronicCom()
+{
+
+    if (modbusDevice)
+        modbusDevice->disconnectDevice();
+    delete modbusDevice;
+
+}
+
 AdaptronicCom::AdaptronicCom(QObject *parent)
     : QObject(parent),
       m_serialadaptronic(Q_NULLPTR),
-      m_decoder(Q_NULLPTR),
+      m_decoderadaptronic(Q_NULLPTR),
       lastRequest(nullptr),
       modbusDevice(nullptr)
 
     {
         modbusDevice = new QModbusRtuSerialMaster(this);
-        connect(m_decoder,SIGNAL(sig_adaptronicReadFinished()),this,SLOT(AdaptronicStartStream()));
+        connect(m_decoderadaptronic,SIGNAL(sig_adaptronicReadFinished()),this,SLOT(AdaptronicStartStream()));
     }
 
 
-AdaptronicCom::AdaptronicCom(Decoder *decoder, QObject *parent)
+AdaptronicCom::AdaptronicCom(DecoderAdaptronic *decoderadaptronic, QObject *parent)
     : QObject(parent)
-    , m_decoder(decoder)
+    , m_decoderadaptronic(decoderadaptronic)
 
 {
 }
@@ -83,7 +92,7 @@ void AdaptronicCom::readyToRead()
             return;
         if(reply->error() == QModbusDevice::NoError){
             const QModbusDataUnit unit = reply->result();
-            m_decoder->decodeAdaptronic(unit);
+            m_decoderadaptronic->decodeAdaptronic(unit);
         }
 
 }
