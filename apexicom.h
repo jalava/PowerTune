@@ -27,13 +27,12 @@
 namespace APEXI {
     namespace DATA {
         enum ENUM {
-            Advance=0xF0
-            /*
-            MapInex=0xDB
-            SensorData=0xDE
-            BaiscData=0xDA
+            Advance=0xF0,
+            MapIndex=0xDB,
+            SensorData=0xDE,
+            BaiscData=0xDA,
             AuxData=0x00
-            */
+
        };
     }
 }

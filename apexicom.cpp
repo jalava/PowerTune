@@ -215,13 +215,14 @@ void ApexiCom::readData(QByteArray serialdata)
             }
 */
 
+
             if(requesttype == APEXI::DATA::Advance) {m_decoderapexi->decodeAdv(serialdata);}
             if(requesttype == 0xDD){m_decoderapexi->decodeSensorStrings(serialdata);}
-            if(requesttype == 0xDE){m_decoderapexi->decodeSensor(serialdata);}
-            if(requesttype == 0x00){m_decoderapexi->decodeAux(serialdata);}
-            if(requesttype == 0x00){m_decoderapexi->decodeAux2(serialdata);}
-            if(requesttype == 0xDB){m_decoderapexi->decodeMap(serialdata);}
+            if(requesttype == APEXI::DATA::SensorData){m_decoderapexi->decodeSensor(serialdata);}
+            if(requesttype == APEXI::DATA::AuxData){m_decoderapexi->decodeAux(serialdata);}
+            if(requesttype == APEXI::DATA::MapIndex){m_decoderapexi->decodeMap(serialdata);}
             if(requesttype == 0xDA){m_decoderapexi->decodeBasic(serialdata);}
+
             if(requesttype == 0xB8){m_decoderapexi->decodeRevIdle(serialdata);}
             if(requesttype == 0x7D){m_decoderapexi->decodeTurboTrans(serialdata);}
             if(requesttype == 0x76){m_decoderapexi->decodeLeadIgn(serialdata, 0);}

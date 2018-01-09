@@ -335,7 +335,7 @@ private:
 
 public:
     explicit DecoderApexi(QObject *parent = 0);
-     explicit DecoderApexi(DashBoard *dashboard, QObject *parent = 0);
+    explicit DecoderApexi(DashBoard *dashboard, QObject *parent = 0);
 
 private:
      DashBoard *m_dashboard;

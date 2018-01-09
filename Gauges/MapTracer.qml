@@ -25,7 +25,10 @@ Rectangle {
                     name: "active"; when: position.valueOf() >= 1
                     PropertyChanges { target: repeat.itemAt(position.valueOf()).color = "blue"}
                 }
-
+                states: State {
+                    name: "notactive"; when: position.valueOf() < 1
+                    PropertyChanges { target: repeat.itemAt(position.valueOf()).color = "lightsteelblue"}
+                }
 
             }
         }
