@@ -7,6 +7,8 @@
 
 class DashBoard;
 
+
+
 class DecoderApexi : public QObject
 {
     Q_OBJECT

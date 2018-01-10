@@ -80,7 +80,7 @@ void DecoderApexi::setUnits(const int &unitSelect)
     {m_dashboard->setunits("metric");}
     if (units == 1 )
     {m_dashboard->setunits("imperial");}
-    //qDebug() << "Unitselection"<< units;
+
 }
 
 
@@ -151,6 +151,8 @@ void DecoderApexi::decodeAdv(QByteArray serialdata)
     m_dashboard->setna1(packageADV[19]);
     m_dashboard->setSecinjpulse(packageADV[20]);
     m_dashboard->setna2(packageADV[21]);
+
+    //qDebug() << "Decoder Apexi works";
 
 
 

@@ -21,17 +21,18 @@ Rectangle {
                 color: "lightsteelblue"
                 border.color: "black"
 
-                states: State {
-                    name: "active"; when: position.valueOf() >= 1
-                    PropertyChanges { target: repeat.itemAt(position.valueOf()).color = "blue"}
+                states:
+                    State {
+                        name: "active"; when: position.valueOf() >= 1
+                        PropertyChanges { target: repeat.itemAt(position.valueOf()).color = "blue"}
+                 /*)
+                        State {
+                        name: "notactive"; when: position.valueOf() < 1
+                        PropertyChanges { target: repeat.itemAt(position.valueOf()).color = "lightsteelblue"}
+                    }
+*/
                 }
-                states: State {
-                    name: "notactive"; when: position.valueOf() < 1
-                    PropertyChanges { target: repeat.itemAt(position.valueOf()).color = "lightsteelblue"}
-                }
-
             }
         }
-        //
     }
 }

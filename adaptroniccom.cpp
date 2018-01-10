@@ -2,6 +2,7 @@
 #include "serial.h"
 #include "serialport.h"
 #include "decoderadaptronic.h"
+#include "dashboard.h"
 #include "appsettings.h"
 #include <QDebug>
 #include <QThread>
@@ -27,17 +28,13 @@ AdaptronicCom::AdaptronicCom(QObject *parent)
       modbusDevice(nullptr)
 
     {
+        m_dashBoard = new DashBoard(this);
+        m_decoderadaptronic = new DecoderAdaptronic(this);
         modbusDevice = new QModbusRtuSerialMaster(this);
         connect(m_decoderadaptronic,SIGNAL(sig_adaptronicReadFinished()),this,SLOT(AdaptronicStartStream()));
     }
 
 
-AdaptronicCom::AdaptronicCom(DecoderAdaptronic *decoderadaptronic, QObject *parent)
-    : QObject(parent)
-    , m_decoderadaptronic(decoderadaptronic)
-
-{
-}
 
 void AdaptronicCom::initSerialPort()
 {

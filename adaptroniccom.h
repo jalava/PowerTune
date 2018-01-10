@@ -21,11 +21,11 @@
 #include <QObject>
 #include <QModbusDataUnit>
 
-class DashBoard;
 class SerialPort;
 class DecoderAdaptronic;
 class QModbusClient;
 class QModbusReply;
+class DashBoard;
 
 class AdaptronicCom : public QObject
 {
@@ -33,7 +33,6 @@ class AdaptronicCom : public QObject
 public:
     ~AdaptronicCom();
     explicit AdaptronicCom(QObject *parent = 0);
-    explicit AdaptronicCom(DecoderAdaptronic *m_decoderadaptronic, QObject *parent = 0);
    // Q_INVOKABLE void clear() const;
     Q_INVOKABLE void initSerialPort();
     Q_INVOKABLE void openConnection(const QString &portName);
@@ -41,6 +40,7 @@ public:
 private:
     SerialPort *m_serialadaptronic;
     DecoderAdaptronic *m_decoderadaptronic;
+    DashBoard *m_dashBoard;
     QModbusReply *lastRequest;
     QModbusClient *modbusDevice;
     QModbusDataUnit readRequest() const;

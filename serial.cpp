@@ -19,7 +19,6 @@
 
 
 #include "serial.h"
-
 #include "nissanconsultcom.h"
 #include "serialobd.h"
 #include "decoderapexi.h"
@@ -93,8 +92,8 @@ Serial::Serial(QObject *parent) :
     m_gopro = new GoPro(this);
     m_gps = new GPS(m_dashBoard, this);
     m_obd = new SerialOBD(m_dashBoard, this);
-    m_apexicom = new ApexiCom(m_decoderapexi,this);
-    m_adaptroniccom = new AdaptronicCom(m_decoderadaptronic,this);
+    m_apexicom = new ApexiCom(this);
+    m_adaptroniccom = new AdaptronicCom(this);
     QQmlApplicationEngine *engine = dynamic_cast<QQmlApplicationEngine*>( parent );
     if (engine == Q_NULLPTR)
         return;

@@ -365,14 +365,14 @@ Item {
         width: parent.width
         height: parent.height
         color: "transparent"
-/*
+
         MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton
             onClicked: pieMenu.popup(mouseX, mouseY)
 
         }
-*/
+
 
         PieMenu {
             id: pieMenu

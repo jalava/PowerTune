@@ -45,16 +45,12 @@ ApexiCom::ApexiCom(QObject *parent)
     : QObject(parent),
       m_serial(Q_NULLPTR),
       m_decoderapexi(Q_NULLPTR),
+      m_dashBoard(Q_NULLPTR),
       m_bytesWritten(0)
 
 {
-
-}
-
-ApexiCom::ApexiCom(DecoderApexi *decoderapexi, QObject *parent)
-    : QObject(parent)
-    , m_decoderapexi(decoderapexi)
-{
+     m_dashBoard = new DashBoard(this);
+     m_decoderapexi = new DecoderApexi(m_dashBoard, this);
 }
 
 
