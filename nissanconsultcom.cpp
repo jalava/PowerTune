@@ -9,7 +9,6 @@
 #include "QObject"
 
 
-
 NissanconsultCom::NissanconsultCom(QObject *parent)
     : QObject(parent),
       m_serialconsult(Q_NULLPTR),
@@ -47,7 +46,7 @@ void NissanconsultCom::clear() const
 void NissanconsultCom::openConnection(const QString &portName)
 {
 
-    qDebug() <<("Opening Port");
+
 
     initSerialPort();
     m_serialconsult->setPortName(portName);
@@ -80,12 +79,14 @@ void NissanconsultCom::closeConnection()
 void NissanconsultCom::InitECU()
 
 {
-qDebug() << "Initialise Nisan";
+    m_serialconsult->write(QByteArray::fromHex("FFFFEF"));
 }
 
 void NissanconsultCom::readyToRead()
 {
 
+    m_readDataConsult = m_serialconsult->readAll();
+    qDebug() <<("Received Data ")<< m_readDataConsult ;
 
 
 }

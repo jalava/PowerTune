@@ -30,6 +30,7 @@ private:
     DashBoard *m_dashboard;
     SerialPort *m_serialconsult;
     DecoderNissanConsult *m_decodernissanconsult;
+    QByteArray  m_readDataConsult;
 
 signals:
 
