@@ -51,11 +51,18 @@ ApexiCom::ApexiCom(QObject *parent)
 {
      m_dashBoard = new DashBoard(this);
      m_decoderapexi = new DecoderApexi(m_dashBoard, this);
+     QQmlApplicationEngine *engine = dynamic_cast<QQmlApplicationEngine*>( parent );
+     if (engine == Q_NULLPTR)
+         return;
+
+
 }
 
 
 void ApexiCom::initSerialPort()
 {
+
+
     if (m_serial)
         delete m_serial;
     m_serial = new SerialPort(this);
@@ -92,11 +99,11 @@ void ApexiCom::openConnection(const QString &portName)
 
     if(m_serial->open(QIODevice::ReadWrite) == false)
     {
-       //m_dashBoard->setSerialStat(m_serial->errorString());
+       m_dashBoard->setSerialStat(m_serial->errorString());
     }
     else
     {
-      // m_dashBoard->setSerialStat(QString("Connected to Serialport"));
+       m_dashBoard->setSerialStat(QString("Connected to Serialport"));
     }
 
     reqquestInd = 0;
@@ -127,7 +134,7 @@ void ApexiCom::handleError(QSerialPort::SerialPortError serialPortError)
         QTextStream out(&mFile);
         out << "Serial Error " << (m_serial->errorString()) <<endl;
         mFile.close();
-        //m_dashBoard->setSerialStat(m_serial->errorString());
+        m_dashBoard->setSerialStat(m_serial->errorString());
 
     }
 }

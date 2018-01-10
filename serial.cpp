@@ -162,8 +162,7 @@ void Serial::openConnection(const QString &portName, const int &ecuSelect, const
     //Apexi
     if (ecuSelect == 0)
     {
-
-        m_apexicom->openConnection(portName);
+       m_apexicom->openConnection(portName);
 
     }
 

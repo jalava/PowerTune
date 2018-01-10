@@ -64,6 +64,7 @@ void DecoderAdaptronic::decodeAdaptronic(QModbusDataUnit unit)
     m_dashboard->setSpeed(unit.value(10)*0.621371); // <-This is for the "main" speedo in MPH
  }
     m_dashboard->setRevs(unit.value(0));
+    qDebug() << "REVS"<< (unit.value(0));
     m_dashboard->setMAP(unit.value(1));
     if (unitsa == 0)
     {
@@ -94,6 +95,7 @@ void DecoderAdaptronic::decodeAdaptronic(QModbusDataUnit unit)
     m_dashboard->setTPS(unit.value(7));
     m_dashboard->setIdleValue(unit.value(8));
     m_dashboard->setBatteryV(unit.value(9)/10);
+
     if (unitsa == 0)
     {
     m_dashboard->setMVSS(unit.value(10));

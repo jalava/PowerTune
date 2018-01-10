@@ -18,7 +18,7 @@
 
 
 int test =1;
-int units = 0;// 0 Metric / 1 Imperial
+int units;// 0 Metric / 1 Imperial
 QByteArray serialdata;
 QByteArray fullFuelBase;
 qreal AN1AN2calc;

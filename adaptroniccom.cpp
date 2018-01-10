@@ -29,7 +29,7 @@ AdaptronicCom::AdaptronicCom(QObject *parent)
 
     {
         m_dashBoard = new DashBoard(this);
-        m_decoderadaptronic = new DecoderAdaptronic(this);
+        m_decoderadaptronic = new DecoderAdaptronic(m_dashBoard,this);
         modbusDevice = new QModbusRtuSerialMaster(this);
         connect(m_decoderadaptronic,SIGNAL(sig_adaptronicReadFinished()),this,SLOT(AdaptronicStartStream()));
     }
