@@ -152,7 +152,8 @@ void DecoderApexi::decodeAdv(QByteArray serialdata)
     m_dashboard->setSecinjpulse(packageADV[20]);
     m_dashboard->setna2(packageADV[21]);
 
-    //qDebug() << "Decoder Apexi works";
+
+   // qDebug() << "Decoder Apexi works"<< (packageADV[0]);
 
 
 

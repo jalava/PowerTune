@@ -51,7 +51,7 @@ void NissanconsultCom::openConnection(const QString &portName)
 
     initSerialPort();
     m_serialconsult->setPortName(portName);
-    m_serialconsult->setBaudRate(QSerialPort::Baud57600);
+    m_serialconsult->setBaudRate(QSerialPort::Baud9600);
     m_serialconsult->setParity(QSerialPort::NoParity);
     m_serialconsult->setDataBits(QSerialPort::Data8);
     m_serialconsult->setStopBits(QSerialPort::OneStop);
@@ -66,6 +66,7 @@ void NissanconsultCom::openConnection(const QString &portName)
       // m_dashBoard->setSerialStat(QString("Connected to Serialport"));
     }
 
+    NissanconsultCom::InitECU();
 
 }
 
@@ -74,3 +75,34 @@ void NissanconsultCom::closeConnection()
 {
     m_serialconsult->close();
 }
+
+
+void NissanconsultCom::InitECU()
+
+{
+qDebug() << "Initialise Nisan";
+}
+
+void NissanconsultCom::readyToRead()
+{
+
+
+
+}
+
+void NissanconsultCom::StartStream()
+
+{
+
+}
+void NissanconsultCom::StopStream()
+
+{
+
+}
+void NissanconsultCom::ReadErrors()
+
+{
+
+}
+

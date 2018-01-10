@@ -36,6 +36,11 @@ signals:
 
 
 public slots:
+    void InitECU();
+    void StartStream();
+    void StopStream();
+    void ReadErrors();
+    void readyToRead();
 
 
 };

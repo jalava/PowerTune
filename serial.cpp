@@ -83,6 +83,7 @@ Serial::Serial(QObject *parent) :
     m_obd(Q_NULLPTR),
     m_apexicom(Q_NULLPTR),
     m_adaptroniccom(Q_NULLPTR),
+    m_nissanconsultcom(Q_NULLPTR),
     m_bytesWritten(0)
 {
 
@@ -94,6 +95,7 @@ Serial::Serial(QObject *parent) :
     m_obd = new SerialOBD(m_dashBoard, this);
     m_apexicom = new ApexiCom(this);
     m_adaptroniccom = new AdaptronicCom(this);
+    m_nissanconsultcom = new NissanconsultCom(this);
     QQmlApplicationEngine *engine = dynamic_cast<QQmlApplicationEngine*>( parent );
     if (engine == Q_NULLPTR)
         return;
@@ -178,8 +180,14 @@ void Serial::openConnection(const QString &portName, const int &ecuSelect, const
     {
     m_obd->SelectPort(portName);
     }
-    //Dicktator
+    //Nissan Consult
     if (ecuSelect == 3)
+    {
+        m_nissanconsultcom->openConnection(portName);
+
+    }
+    //Dicktator
+    if (ecuSelect == 6)
     {
 
         initSerialPort();
@@ -210,7 +218,7 @@ void Serial::closeConnection()
     if(ecu == 1){
         m_adaptroniccom->closeConnection();
     }
-    if(ecu == 3){
+    if(ecu == 6){
         m_serialport->close();
     }
 }
@@ -234,7 +242,7 @@ void Serial::update()
 void Serial::readyToRead()
 {
 
-    if(ecu == 3) //Dicktator ECU
+    if(ecu == 6) //Dicktator ECU
     {
         m_readData = m_serialport->readAll();
         Serial::dicktatorECU(m_readData);

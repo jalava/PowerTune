@@ -32,6 +32,7 @@ class DecoderApexi;
 class DecoderAdaptronic;
 class ApexiCom;
 class AdaptronicCom;
+class NissanconsultCom;
 class AppSettings;
 class GoPro;
 class GPS;
@@ -80,6 +81,7 @@ private:
     DecoderAdaptronic *m_decoderadaptronic;
     DashBoard *m_dashBoard;
     AppSettings *m_appSettings;
+    NissanconsultCom *m_nissanconsultcom;
     GoPro *m_gopro;
     GPS *m_gps;
     SerialOBD *m_obd;
