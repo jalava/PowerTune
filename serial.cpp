@@ -19,6 +19,8 @@
 
 
 #include "serial.h"
+
+#include "nissanconsultcom.h"
 #include "serialobd.h"
 #include "decoderapexi.h"
 #include "decoderadaptronic.h"

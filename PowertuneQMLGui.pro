@@ -21,9 +21,7 @@ SOURCES += main.cpp \
     nissanconsultcom.cpp \
     decoderapexi.cpp \
     decoderadaptronic.cpp \
-    decodernissanconsult.cpp \
-    ConsultErrorCode.cpp \
-    ConsultRegister.cpp
+    decodernissanconsult.cpp
 
 RESOURCES += qml.qrc
 
@@ -48,9 +46,7 @@ HEADERS += \
     nissanconsultcom.h \
     decoderapexi.h \
     decoderadaptronic.h \
-    decodernissanconsult.h \
-    ConsultErrorCode.h \
-    ConsultRegister.h
+    decodernissanconsult.h
 
 FORMS +=
 

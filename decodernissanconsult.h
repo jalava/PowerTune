@@ -2,10 +2,12 @@
 #define DECODERNISSANCONSULT_H
 
 
-class decoderNissanConsult
+class DecoderNissanConsult
 {
 public:
-    decoderNissanConsult();
+    DecoderNissanConsult();
 };
+
+
 
 #endif // DECODERNISSANCONSULT_H

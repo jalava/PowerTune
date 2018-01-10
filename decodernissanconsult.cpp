@@ -1,6 +1,6 @@
 #include "decodernissanconsult.h"
 
-decoderNissanConsult::decoderNissanConsult()
+DecoderNissanConsult::DecoderNissanConsult()
 {
 
 }
