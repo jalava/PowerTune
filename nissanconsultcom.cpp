@@ -198,26 +198,9 @@ void NissanconsultCom::readyToRead()
         qDebug() <<("Initstate ")<< ECUinitialized ;
         m_readDataConsult.clear();
         qDebug() <<("ECU Initialized ");
-        /*
-        Request Live Data Stream for the following values
-        5A0B	Vehicle speed 
-        5A01	CAS Position (RPM)
-        5A08	Coolant temp 	
-        5A0C	Battery Voltage 
-        5A0D	Throttle Position Sensor Voltage
-        5A03	CAS Reference (RPM) 			
-        5A05	MAF voltage
-        5A09	LH O2 Sensor Voltage 
-        5A13	Digital Bit Register
-        5A16	Ignition Timing 
-        5A17	AAC Valve (Idle Air Valve %)
-        5A1A	A/F ALPHA-LH
-        5A1C	A/F ALPHA-LH (SELFLEARN)
-        5A21	M/R F/C MNT 
-        F0		Command termination
-        */
         qDebug() <<("Start streaming live messages");
-        m_serialconsult->write(QByteArray::fromHex("5A0B5A015A085A0C5A0D5A035A055A095A135A165A175A1A5A1C5A21F0"));
+        // Send Live Data Stream Request
+        m_serialconsult->write(Liveread);
 
      }
 
@@ -235,15 +218,29 @@ void NissanconsultCom::ProcessRawMessage(const QByteArray &buffer)
                  int posstart = m_buffer.indexOf(StartFrame);
                  qDebug() <<("Found Start Frame at position")<<posstart;
                  Expectedlenght =  (posstart+2) + (m_buffer[posstart+1]);
+                 int CurrentLenght = m_buffer.length();
                  qDebug() <<("Expexted message Lenght")<<Expectedlenght;
                  qDebug() <<("Current Lenght")<<m_buffer.length();
+                 if (m_buffer.length() > Expectedlenght)
+                 {
+                    m_consultreply = m_buffer;
+                    m_consultreply.remove(Expectedlenght,CurrentLenght);
+                    m_buffer.remove(0,Expectedlenght);
+                 }
+                 qDebug() <<("COnsultreplyt")<<m_consultreply.toHex();
+                 qDebug() <<("Buffer")<<m_buffer.toHex();
+
+
 
                 }
-            if (m_buffer.length() == Expectedlenght)
+
+            if (m_consultreply.length() == Expectedlenght)
                 {
 
                  qDebug() <<("Message Lenghth as expected");
-                 NissanconsultCom::ProcessMessage(m_buffer);
+                 NissanconsultCom::ProcessMessage(m_consultreply);
+                 m_consultreply.clear();
+
                 }
 
 
@@ -254,6 +251,9 @@ void NissanconsultCom::LiveReqMsg(const int &val1, const int &val2, const int &v
 
 {
 
+    // Ensure the Array is cleared first
+
+    Liveread.clear();
     // Build the request message for live Data based on the usser selected Sennsors (Reequest from QML)
 
 qDebug() <<("bUILD mESSAGE");
@@ -436,7 +436,7 @@ qDebug() <<("bUILD mESSAGE");
 
     //Terminate Message
     Liveread.append(ConsultData::TerminateMessage);
-    qDebug() <<("cOMPLETE mESSAGE")<< Liveread.toHex();
+    qDebug() <<("Complete Message")<< Liveread.toHex();
 }
 
 void NissanconsultCom::StopStream()
@@ -457,17 +457,8 @@ void NissanconsultCom::ProcessMessage(QByteArray serialdataconsult)
     {
 
         quint8 requesttypeconsult = serialdataconsult[0];
-
-
-        if(m_ECUResponsecomplete[2] + 3 == m_ECUResponsecomplete.length())
-        {
-
-
             //if(requesttypeconsult == 0x25){m_decodernissanconsult->decodeLiveStream(serialdataconsult);}
             //if(requesttypeconsult == 0x2E){m_decodernissanconsult->decodeDTCConsult(serialdataconsult);}
-
-
-       }
         serialdataconsult.clear();
 
     }

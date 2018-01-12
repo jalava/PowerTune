@@ -112,6 +112,7 @@ private:
     QByteArray  m_readDataConsult;
     QByteArray  m_ECUResponsecomplete;
     QByteArray  m_buffer;
+    QByteArray  m_consultreply;
 
 signals:
 
