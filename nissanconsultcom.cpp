@@ -96,6 +96,10 @@ FPCM F/P Voltage 				Dual 			0x52, 0x53
 QByteArray InitECU = (QByteArray::fromHex("FFFFEF"));
 QByteArray Liveread;
 
+int Livedatarequested = 0;
+int Stoprequested = 0;
+int DTCrequested = 0;
+
 
 //Live Data Request commands
 
@@ -118,135 +122,6 @@ NissanconsultCom::NissanconsultCom(DecoderNissanConsult *decodernissanconsult, Q
 {
 }
 
-
-void NissanconsultCom::initSerialPort()
-{
-    if (m_serialconsult)
-        delete m_serialconsult;
-    m_serialconsult = new SerialPort(this);
-    connect(this->m_serialconsult,SIGNAL(readyRead()),this,SLOT(readyToRead()));
-
-
-}
-
-//function for flushing all serial buffers
-void NissanconsultCom::clear() const
-{
-    m_serialconsult->clear();
-}
-
-
-//function to open serial port
-void NissanconsultCom::openConnection(const QString &portName)
-{
-
-
-    qDebug() <<("Open Consult ")<<portName;
-    initSerialPort();
-    m_serialconsult->setPortName(portName);
-    m_serialconsult->setBaudRate(QSerialPort::Baud9600);
-    m_serialconsult->setParity(QSerialPort::NoParity);
-    m_serialconsult->setDataBits(QSerialPort::Data8);
-    m_serialconsult->setStopBits(QSerialPort::OneStop);
-    m_serialconsult->setFlowControl(QSerialPort::NoFlowControl);;
-
-    if(m_serialconsult->open(QIODevice::ReadWrite) == false)
-    {
-       //m_dashBoard->setSerialStat(m_serialconsult->errorString());
-    }
-    else
-    {
-      // m_dashBoard->setSerialStat(QString("Connected to Serialport"));
-    }
-    ECUinitialized = 0;
-    NissanconsultCom::InitECU();
-
-}
-
-void NissanconsultCom::closeConnection()
-
-{
-    m_serialconsult->close();
-
-
-}
-
-
-void NissanconsultCom::InitECU()
-
-{
-    ECUinitialized = 0;
-    m_serialconsult->write(QByteArray::fromHex("FFFFEF"));
-}
-
-void NissanconsultCom::readyToRead()
-{
-
-    m_readDataConsult = m_serialconsult->readAll();
-    qDebug() <<("Received Data ")<< m_readDataConsult.toHex() ;
-    qDebug() <<("Initstate ")<< ECUinitialized ;
-
-    if (ECUinitialized == 1)
-     {
-        qDebug() <<("Process Raw Message");
-        NissanconsultCom::ProcessRawMessage(m_readDataConsult);
-     }
-
-    if (ECUinitialized == 0 && m_readDataConsult[0] == 0x10)
-     {
-        ECUinitialized = 1;
-        qDebug() <<("Initstate ")<< ECUinitialized ;
-        m_readDataConsult.clear();
-        qDebug() <<("ECU Initialized ");
-        qDebug() <<("Start streaming live messages");
-        // Send Live Data Stream Request
-        m_serialconsult->write(Liveread);
-
-     }
-
-}
-
-void NissanconsultCom::ProcessRawMessage(const QByteArray &buffer)
-{
-        QByteArray StartFrame = (QByteArray::fromHex("FF"));
-        QByteArray Requesttype = (QByteArray::fromHex("25"));
-        m_buffer.append(buffer);
-        qDebug() <<("Current Message")<<m_buffer.toHex();
-
-            if (m_buffer.contains(StartFrame))
-                {
-                 int posstart = m_buffer.indexOf(StartFrame);
-                 qDebug() <<("Found Start Frame at position")<<posstart;
-                 Expectedlenght =  (posstart+2) + (m_buffer[posstart+1]);
-                 int CurrentLenght = m_buffer.length();
-                 qDebug() <<("Expexted message Lenght")<<Expectedlenght;
-                 qDebug() <<("Current Lenght")<<m_buffer.length();
-                 if (m_buffer.length() > Expectedlenght)
-                 {
-                    m_consultreply = m_buffer;
-                    m_consultreply.remove(Expectedlenght,CurrentLenght);
-                    m_buffer.remove(0,Expectedlenght);
-                 }
-                 qDebug() <<("COnsultreplyt")<<m_consultreply.toHex();
-                 qDebug() <<("Buffer")<<m_buffer.toHex();
-
-
-
-                }
-
-            if (m_consultreply.length() == Expectedlenght)
-                {
-
-                 qDebug() <<("Message Lenghth as expected");
-                 NissanconsultCom::ProcessMessage(m_consultreply);
-                 m_consultreply.clear();
-
-                }
-
-
-}
-
-
 void NissanconsultCom::LiveReqMsg(const int &val1, const int &val2, const int &val3, const int &val4, const int &val5, const int &val6, const int &val7, const int &val8, const int &val9, const int &val10, const int &val11, const int &val12, const int &val13, const int &val14, const int &val15, const int &val16, const int &val17, const int &val18, const int &val19, const int &val20, const int &val21, const int &val22, const int &val23, const int &val24, const int &val25, const int &val26, const int &val27, const int &val28, const int &val29, const int &val30, const int &val31, const int &val32, const int &val33, const int &val34, const int &val35)
 
 {
@@ -256,7 +131,7 @@ void NissanconsultCom::LiveReqMsg(const int &val1, const int &val2, const int &v
     Liveread.clear();
     // Build the request message for live Data based on the usser selected Sennsors (Reequest from QML)
 
-qDebug() <<("bUILD mESSAGE");
+    qDebug() <<("bUILD mESSAGE");
 
     if (val1 == 1 )
     {
@@ -439,29 +314,210 @@ qDebug() <<("bUILD mESSAGE");
     qDebug() <<("Complete Message")<< Liveread.toHex();
 }
 
+
+void NissanconsultCom::initSerialPort()
+{
+    if (m_serialconsult)
+        delete m_serialconsult;
+    m_serialconsult = new SerialPort(this);
+    connect(this->m_serialconsult,SIGNAL(readyRead()),this,SLOT(readyToRead()));
+    connect(&m_DTCtimer, &QTimer::timeout, this, &NissanconsultCom::RequestDTC);
+
+
+}
+
+
+//function to open serial port
+void NissanconsultCom::openConnection(const QString &portName)
+{
+
+
+    qDebug() <<("Open Consult ")<<portName;
+    initSerialPort();
+    m_serialconsult->setPortName(portName);
+    m_serialconsult->setBaudRate(QSerialPort::Baud9600);
+    m_serialconsult->setParity(QSerialPort::NoParity);
+    m_serialconsult->setDataBits(QSerialPort::Data8);
+    m_serialconsult->setStopBits(QSerialPort::OneStop);
+    m_serialconsult->setFlowControl(QSerialPort::NoFlowControl);;
+
+    if(m_serialconsult->open(QIODevice::ReadWrite) == false)
+    {
+        //m_dashBoard->setSerialStat(m_serialconsult->errorString());
+    }
+    else
+    {
+        // m_dashBoard->setSerialStat(QString("Connected to Serialport"));
+    }
+    ECUinitialized = 0;
+    NissanconsultCom::InitECU();
+
+}
+
+void NissanconsultCom::closeConnection()
+
+{
+    m_serialconsult->close();
+
+
+}
+
+
+void NissanconsultCom::InitECU()
+
+{
+    ECUinitialized = 0;
+    m_serialconsult->write(QByteArray::fromHex("FFFFEF"));
+}
+void NissanconsultCom::clear() const
+{
+    m_serialconsult->clear();
+}
+
 void NissanconsultCom::StopStream()
 
 {
-
+    m_serialconsult->write(QByteArray::fromHex("30"));
+    Stoprequested = 1;
 }
-void NissanconsultCom::ReadErrors()
+
+void NissanconsultCom::RequestDTC()
 
 {
+    qDebug() <<("Timer Expired ");
+    m_DTCtimer.stop();
+    DTCrequested = 1;
+    NissanconsultCom::StopStream();
+    Livedatarequested = 0;
+
 
 }
+
+void NissanconsultCom::RequestLiveData()
+
+{
+    m_DTCtimer.start(5000);
+    qDebug() <<("DTCTIMER START ");
+    Livedatarequested = 1;
+    DTCrequested = 0;
+    m_serialconsult->write(Liveread);
+
+}
+void NissanconsultCom::readyToRead()
+{
+
+    m_readDataConsult = m_serialconsult->readAll();
+    qDebug() <<("Received Data ")<< m_readDataConsult.toHex() ;
+    qDebug() <<("Initstate ")<< ECUinitialized ;
+
+    if (ECUinitialized == 1)
+    {
+        qDebug() <<("Process Raw Message");
+        NissanconsultCom::ProcessRawMessage(m_readDataConsult);
+    }
+
+    if (ECUinitialized == 0 && m_readDataConsult[0] == 0x10)
+    {
+        ECUinitialized = 1;
+        qDebug() <<("Initstate ")<< ECUinitialized ;
+        m_readDataConsult.clear();
+        qDebug() <<("ECU Initialized ");
+        // Send Live Data Stream Request
+        NissanconsultCom::RequestLiveData();
+
+    }
+
+}
+
+void NissanconsultCom::ProcessRawMessage(const QByteArray &buffer)
+{
+    m_buffer.append(buffer);
+
+    QByteArray StartFrame = (QByteArray::fromHex("FF"));
+
+    qDebug() <<("Current Message")<<m_buffer.toHex();
+
+    if (m_buffer.contains(StartFrame))
+    {
+        int posstart = m_buffer.indexOf(StartFrame);
+        qDebug() <<("Found Start Frame at position")<<posstart;
+        Expectedlenght =  (posstart+2) + (m_buffer[posstart+1]);
+        int CurrentLenght = m_buffer.length();
+        qDebug() <<("Expexted message Lenght")<<Expectedlenght;
+        qDebug() <<("Current Lenght")<<m_buffer.length();
+        if (m_buffer.length() > Expectedlenght)
+        {
+            m_consultreply = m_buffer;
+            m_consultreply.remove(Expectedlenght,CurrentLenght);
+            m_buffer.remove(0,Expectedlenght);
+        }
+        if (m_buffer.length() == Expectedlenght)
+        {
+            m_consultreply = m_buffer;
+        }
+        }
+        qDebug() <<("Consultreply")<<m_consultreply.toHex();
+        qDebug() <<("Buffer")<<m_buffer.toHex();
+
+    if (Stoprequested ==1)
+    {
+        QByteArray Stopbyte = (QByteArray::fromHex("CF"));
+
+        qDebug() <<("Current Message")<<m_buffer.toHex();
+
+        if (m_buffer.contains(Stopbyte))
+        {
+            qDebug() <<("Found Stopbyte");
+            m_buffer.clear();
+            Stoprequested = 0;
+
+            if (DTCrequested ==1)
+            {
+                DTCrequested = 0;
+                Livedatarequested = 1;
+                m_serialconsult->write(QByteArray::fromHex("D1F0"));
+
+            }
+            if (Livedatarequested ==1 )
+            {
+
+                NissanconsultCom::RequestLiveData();;
+
+            }
+        }
+
+    }
+
+
+    if (m_consultreply.length() == Expectedlenght)
+    {
+        Expectedlenght = 2000;  //Set Expexctedlenght to a ridiculous High value
+        qDebug() <<("Message Lenghth as expected");
+        if (DTCrequested ==1)
+        {
+            DTCrequested = 0;
+            NissanconsultCom::StopStream();
+
+        }
+        NissanconsultCom::ProcessMessage(m_consultreply);
+        m_consultreply.clear();
+
+    }
+
+
+}
+
+
 
 void NissanconsultCom::ProcessMessage(QByteArray serialdataconsult)
 {
-    qDebug() <<("Check Message Type and send to decoder");
-    if( m_ECUResponsecomplete.length() )
-    {
+    quint8 requesttypeconsult = serialdataconsult[0];
+    qDebug() <<("Check Message Type and send to decoder")<<serialdataconsult.toHex();
 
-        quint8 requesttypeconsult = serialdataconsult[0];
-            //if(requesttypeconsult == 0x25){m_decodernissanconsult->decodeLiveStream(serialdataconsult);}
-            //if(requesttypeconsult == 0x2E){m_decodernissanconsult->decodeDTCConsult(serialdataconsult);}
+        //if(requesttypeconsult == 0x25){m_decodernissanconsult->decodeLiveStream(serialdataconsult);}
+        //if(requesttypeconsult == 0x2E){m_decodernissanconsult->decodeDTCConsult(serialdataconsult);}
+        if(requesttypeconsult == 0x2E){NissanconsultCom::StopStream();}
         serialdataconsult.clear();
-
-    }
 
 
 }
