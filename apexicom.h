@@ -21,7 +21,7 @@
 #include <QTimer>
 #include <QThread>
 #include <QtSerialPort/QSerialPort>
-#include <QTimer>
+
 
 
 namespace APEXI {

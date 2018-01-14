@@ -56,7 +56,7 @@ Digital Control Register 		Single byte 	0x1e 					See digital register table
 Digital Control Register 		Single byte 	0x1f 					See digital register table
 M/R F/C MNT 					Single byte 	0x21 					See digital register table
 Injector time (RH) 				MSB 			0x22 					See LSB
-Injector time (RH) 				LSD 			0x23 					Value / 100 (mS)
+Injector time (RH) 				LSB 			0x23 					Value / 100 (mS)
 Waste Gate Solenoid % 			Single byte 	0x28
 Turbo Boost Sensor, Voltage 	Single byte 	0x29
 Engine Mount On/Off 			Single byte 	0x2a
@@ -122,7 +122,7 @@ NissanconsultCom::NissanconsultCom(DecoderNissanConsult *decodernissanconsult, Q
 {
 }
 
-void NissanconsultCom::LiveReqMsg(const int &val1, const int &val2, const int &val3, const int &val4, const int &val5, const int &val6, const int &val7, const int &val8, const int &val9, const int &val10, const int &val11, const int &val12, const int &val13, const int &val14, const int &val15, const int &val16, const int &val17, const int &val18, const int &val19, const int &val20, const int &val21, const int &val22, const int &val23, const int &val24, const int &val25, const int &val26, const int &val27, const int &val28, const int &val29, const int &val30, const int &val31, const int &val32, const int &val33, const int &val34, const int &val35)
+void NissanconsultCom::LiveReqMsg(const int &val1, const int &val2, const int &val3, const int &val4, const int &val5, const int &val6, const int &val7, const int &val8, const int &val9, const int &val10, const int &val11, const int &val12, const int &val13, const int &val14, const int &val15, const int &val16, const int &val17, const int &val18, const int &val19, const int &val20, const int &val21, const int &val22, const int &val23, const int &val24, const int &val25, const int &val26, const int &val27)
 
 {
 
@@ -133,57 +133,45 @@ void NissanconsultCom::LiveReqMsg(const int &val1, const int &val2, const int &v
 
     qDebug() <<("bUILD mESSAGE");
 
-    if (val1 == 1 )
+    if (val1 == 1 ) //RPMPosition
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::CASPosRPMMSB);
-    }
-    if (val2 == 1 )
-    {
-        Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::CASPosRPMLSB);
     }
-    if (val3 == 1 )
+
+    if (val2 == 1 )//RPMReference
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::CASRefRPMMSB);
-    }
-    if (val4 == 1 )
-    {
-        Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::CASRefRPMLSB);
     }
-    if (val5 == 1 )
+
+    if (val2 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::MAFVoltMSB);
-    }
-    if (val6 == 1 )
-    {
-        Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::MAFVoltLSB);
     }
-    if (val7 == 1 )
+
+    if (val3 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::RHMAFVoltMSB);
-    }
-    if (val8 == 1 )
-    {
-        Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::RHMAFVoltLSB);
     }
-    if (val9 == 1 )
+
+    if (val4 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::CoolantTemp);
     }
-    if (val10 == 1 )
+    if (val5 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::LHO2Volt);
     }
-    if (val11 == 1 )
+    if (val6 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::RHO2Volt);
@@ -192,118 +180,110 @@ void NissanconsultCom::LiveReqMsg(const int &val1, const int &val2, const int &v
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::Speed);
     }
-    if (val13 == 1 )
+    if (val7 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::BattVolt);
     }
-    if (val14 == 1 )
+    if (val8 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::TPS);
     }
-    if (val15 == 1 )
+    if (val9 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::FuelTemp);
     }
-    if (val16 == 1 )
+    if (val10 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::IAT);
     }
-    if (val17 == 1 )
+    if (val11 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::EGT);
     }
-    if (val18 == 1 )
+    if (val12 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::DigitalBitRegister);
     }
-    if (val19 == 1 )
+    if (val13 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::InjectTimeLHMSB);
-    }
-    if (val20 == 1 )
-    {
-        Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::InjectTimeLHLSB);
     }
-    if (val21 == 1 )
+    if (val14 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::IgnitionTiming);
     }
-    if (val22 == 1 )
+    if (val15 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::AACValve);
     }
-    if (val23 == 1 )
+    if (val16 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::AFALPHALH);
     }
-    if (val24 == 1 )
+    if (val17 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::AFALPHARH);
     }
-    if (val25 == 1 )
+    if (val18 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::AFALPHASELFLEARNLH);
     }
-    if (val26 == 1 )
+    if (val19 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::AFALPHASELFLEARNRH);
     }
-    if (val27 == 1 )
+    if (val20 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::DigitalControlReg1);
     }
-    if (val28 == 1 )
+    if (val21 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::DigitalControlReg2);
     }
-    if (val29 == 1 )
+    if (val22 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::MRFCMNT);
     }
-    if (val30 == 1 )
+    if (val23 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::InjecttimeRHMSB);
-    }
-    //
-    if (val31 == 1 )
-    {
-        Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::InjecttimeRHLSB);
     }
-    if (val32 == 1 )
+
+    if (val24 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::WasteGate);
     }
-    if (val33 == 1 )
+    if (val25 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::MAPVolt);
     }
-    if (val34 == 1 )
+    if (val26 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::EngineMount);
     }
-    if (val35 == 1 )
+    if (val27 == 1 )
     {
         Liveread.append(ConsultData::LiveDataRequest);
         Liveread.append(ConsultData::PositionCounter);
@@ -514,7 +494,7 @@ void NissanconsultCom::ProcessMessage(QByteArray serialdataconsult)
     quint8 requesttypeconsult = serialdataconsult[0];
     qDebug() <<("Check Message Type and send to decoder")<<serialdataconsult.toHex();
 
-        //if(requesttypeconsult == 0x25){m_decodernissanconsult->decodeLiveStream(serialdataconsult);}
+        if(requesttypeconsult == 0x25){m_decodernissanconsult->decodeLiveStream(serialdataconsult);}
         //if(requesttypeconsult == 0x2E){m_decodernissanconsult->decodeDTCConsult(serialdataconsult);}
         if(requesttypeconsult == 0x2E){NissanconsultCom::StopStream();}
         serialdataconsult.clear();

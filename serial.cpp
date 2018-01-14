@@ -23,6 +23,7 @@
 #include "serialobd.h"
 #include "decoderapexi.h"
 #include "decoderadaptronic.h"
+#include "decodernissanconsult.h"
 #include "dashboard.h"
 #include "serialport.h"
 #include "appsettings.h"
@@ -183,6 +184,7 @@ void Serial::openConnection(const QString &portName, const int &ecuSelect, const
     //Nissan Consult
     if (ecuSelect == 3)
     {
+        m_nissanconsultcom->LiveReqMsg(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
         m_nissanconsultcom->openConnection(portName);
 
     }
