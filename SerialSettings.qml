@@ -100,10 +100,10 @@ Rectangle {
 
                     id: ecuSelect
                     width: 200
-
                     //model: [ "PowerFC", "Adaptronic"]
                     model: [ "PowerFC", "Adaptronic", "OBD ELM","Nissan Consult"]
                     property bool initialized: false
+
                     onCurrentIndexChanged: if (initialized) AppSettings.setECU( currentIndex )
                     Component.onCompleted: { currentIndex = AppSettings.getECU(); initialized = true }
                 }
@@ -205,7 +205,8 @@ Rectangle {
                 }
                 Switch {
                     id: loggerswitch
-                    text: qsTr("Data Logger")
+                    //text: qsTr("Data Logger")
+                    text: Dashboard.revs
                     onCheckedChanged: logger.datalogger()
                 }
 

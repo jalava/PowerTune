@@ -1,15 +1,13 @@
 #include <dashboard.h>
 #include <QStringList>
+#include <QDebug>
 
 
 
 DashBoard::DashBoard(QObject *parent)
     : QObject(parent)
 
-
     //  Odometer
-
-
     , m_revs(0)
     , m_Intakepress(0)
     , m_PressureV(0)
@@ -47,8 +45,6 @@ DashBoard::DashBoard(QObject *parent)
 
 
     //Boost
-
-
     , m_pim(0)
 
     //Aux Inputs
@@ -68,7 +64,6 @@ DashBoard::DashBoard(QObject *parent)
     , m_sens8(0.00)
 
     //Flag Strings
-
     , m_FlagString1 ("F-1")
     , m_FlagString2 ("F-2")
     , m_FlagString3 ("F-3")
@@ -87,7 +82,6 @@ DashBoard::DashBoard(QObject *parent)
     , m_FlagString16 ("F16")
 
     //Sensor Srings
-
     , m_SensorString1 ("SEN1")
     , m_SensorString2 ("SEN2")
     , m_SensorString3 ("SEN3")
@@ -96,7 +90,6 @@ DashBoard::DashBoard(QObject *parent)
     , m_SensorString6 ("SEN6")
     , m_SensorString7 ("SEN7")
     , m_SensorString8 ("SEN8")
-
 
 
     //Bit Flags for Sensors
@@ -149,9 +142,8 @@ DashBoard::DashBoard(QObject *parent)
 
   //Map Position
     , m_mapPos(0)
-
-
 {
+
 }
 
 
@@ -171,8 +163,10 @@ void DashBoard::setRevs(const qreal &revs)
     if (m_revs == revs)
         return;
     m_revs = revs;
+    qDebug() << "changed" << revs;
     emit revsChanged(revs);
 }
+
 
 void DashBoard::setIntakepress(const qreal &Intakepress)
 {

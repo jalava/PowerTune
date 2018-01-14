@@ -51,12 +51,6 @@ ApexiCom::ApexiCom(QObject *parent)
 {
      m_dashBoard = new DashBoard(this);
      m_decoderapexi = new DecoderApexi(m_dashBoard, this);
-    /*
-     QQmlApplicationEngine *engine = dynamic_cast<QQmlApplicationEngine*>( parent );
-     if (engine == Q_NULLPTR)
-         return;
-     engine->rootContext()->setContextProperty("Dashboard", m_dashBoard);
-    */
 
 }
 

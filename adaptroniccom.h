@@ -9,7 +9,6 @@
  * is made available for FREE.
  *
  * No warranty is made or implied. You use this program at your own risk.
-
   \file adaptroniccom.h
   \brief request and receive messages from Adaptronic PNP & Select ECU's
   \author Bastian Gschrey & Markus Ippy
@@ -32,7 +31,7 @@ class AdaptronicCom : public QObject
     Q_OBJECT
 public:
     ~AdaptronicCom();
-    explicit AdaptronicCom(QObject *parent = 0);
+    explicit AdaptronicCom(DashBoard *dashboard, QObject *parent = 0);
    // Q_INVOKABLE void clear() const;
     Q_INVOKABLE void initSerialPort();
     Q_INVOKABLE void openConnection(const QString &portName);

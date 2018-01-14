@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
 
     qmlRegisterType<Serial>("com.powertune", 1, 0, "SerialObject");
-    engine.rootContext()->setContextProperty("Work", &Cluster);
+    //engine.rootContext()->setContextProperty("Work", &Cluster);
     engine.rootContext()->setContextProperty("Serial", new Serial(&engine));
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

@@ -155,11 +155,11 @@ private:
 
 
 public:
-    explicit DecoderAdaptronic(QObject *parent = 0);
+     explicit DecoderAdaptronic(QObject *parent = 0);
      explicit DecoderAdaptronic(DashBoard *dashboard, QObject *parent = 0);
 
 private:
-     DashBoard *m_dashboard;
+     DashBoard *m_dashBoard;
 public slots:
      void setUnits(const int &unitSelect);
      //Adaptronic Streaming Comms

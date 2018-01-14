@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QThread>
+#include <QQmlApplicationEngine>
 
 int unitsa;// 0 Metric / 1 Imperial
 QByteArray serialdataa;
@@ -21,17 +22,17 @@ QTime loggerTimer = QTime::currentTime();
 int Log =3;
 int Loggerstatadaptronic;
 
-
-DecoderAdaptronic::DecoderAdaptronic (QObject *parent)
-    : QObject(parent)
-    , m_dashboard(Q_NULLPTR)
-{
-}
-
 DecoderAdaptronic::DecoderAdaptronic(DashBoard *dashboard, QObject *parent)
     : QObject(parent)
-    , m_dashboard(dashboard)
+    , m_dashBoard(dashboard)
 {
+    QQmlApplicationEngine *engine = dynamic_cast<QQmlApplicationEngine*>(parent);
+    if (engine == Q_NULLPTR){
+        qDebug() << "engine is NULL from serial class";
+        return;
+    }
+
+
 }
 
 
@@ -40,9 +41,9 @@ void DecoderAdaptronic::setUnits(const int &unitSelect)
 {
     unitsa = unitSelect;
     if (unitsa == 0 )
-    {m_dashboard->setunits("metric");}
+    {m_dashBoard->setunits("metric");}
     if (unitsa == 1 )
-    {m_dashboard->setunits("imperial");}
+    {m_dashBoard->setunits("imperial");}
     //qDebug() << "Unitselection"<< units;
 }
 
@@ -57,70 +58,70 @@ void DecoderAdaptronic::decodeAdaptronic(QModbusDataUnit unit)
  if (unitsa == 0)
  {
      //qDebug() << "i am at 0 " ;
-    m_dashboard->setSpeed(unit.value(10)); // <-This is for the "main" speedo KMH
+    m_dashBoard->setSpeed(unit.value(10)); // <-This is for the "main" speedo KMH
  }
  if (unitsa == 1)
  {
-    m_dashboard->setSpeed(unit.value(10)*0.621371); // <-This is for the "main" speedo in MPH
+    m_dashBoard->setSpeed(unit.value(10)*0.621371); // <-This is for the "main" speedo in MPH
  }
-    m_dashboard->setRevs(unit.value(0));
-    qDebug() << "REVS"<< (unit.value(0));
-    m_dashboard->setMAP(unit.value(1));
+    m_dashBoard->setRevs(unit.value(0));
+    qDebug() << "REVS" << m_dashBoard->revs();
+    m_dashBoard->setMAP(unit.value(1));
     if (unitsa == 0)
     {
-    m_dashboard->setIntaketemp(unit.value(2));
+    m_dashBoard->setIntaketemp(unit.value(2));
     }
     if (unitsa == 1)
     {
-    m_dashboard->setIntaketemp(qRound(unit.value(2)* 1.8 + 32));
+    m_dashBoard->setIntaketemp(qRound(unit.value(2)* 1.8 + 32));
     }
     if (unitsa == 0)
     {
-    m_dashboard->setWatertemp(unit.value(3));
+    m_dashBoard->setWatertemp(unit.value(3));
     }
     if (unitsa == 1)
     {
-    m_dashboard->setWatertemp(qRound(unit.value(3)* 1.8 + 32));
+    m_dashBoard->setWatertemp(qRound(unit.value(3)* 1.8 + 32));
     }
     if (unitsa == 0)
     {
-    m_dashboard->setAUXT(unit.value(4));
+    m_dashBoard->setAUXT(unit.value(4));
     }
     if (unitsa == 1)
     {
-    m_dashboard->setAUXT(unit.value(4)* 1.8 + 32);
+    m_dashBoard->setAUXT(unit.value(4)* 1.8 + 32);
     }
-    m_dashboard->setauxcalc1(unit.value(5)/2570.00);
-    m_dashboard->setKnock(unit.value(6)/256);
-    m_dashboard->setTPS(unit.value(7));
-    m_dashboard->setIdleValue(unit.value(8));
-    m_dashboard->setBatteryV(unit.value(9)/10);
+    m_dashBoard->setauxcalc1(unit.value(5)/2570.00);
+    m_dashBoard->setKnock(unit.value(6)/256);
+    m_dashBoard->setTPS(unit.value(7));
+    m_dashBoard->setIdleValue(unit.value(8));
+    m_dashBoard->setBatteryV(unit.value(9)/10);
 
     if (unitsa == 0)
     {
-    m_dashboard->setMVSS(unit.value(10));
+    m_dashBoard->setMVSS(unit.value(10));
     }
     if (unitsa == 1)
     {
-    m_dashboard->setMVSS(qRound(unit.value(10)*0.621371));
+    m_dashBoard->setMVSS(qRound(unit.value(10)*0.621371));
     }
     if (unitsa == 0)
     {
-    m_dashboard->setSVSS(unit.value(11));
+    m_dashBoard->setSVSS(unit.value(11));
     }
     if (unitsa == 1)
     {
-    m_dashboard->setSVSS(qRound(unit.value(11)*0.621371));
+    m_dashBoard->setSVSS(qRound(unit.value(11)*0.621371));
     }
-    m_dashboard->setInj1((unit.value(12)/3)*2);
-    m_dashboard->setInj2((unit.value(13)/3)*2);
-    m_dashboard->setInj3((unit.value(14)/3)*2);
-    m_dashboard->setInj4((unit.value(15)/3)*2);
-    m_dashboard->setIgn1((unit.value(16)/5));
-    m_dashboard->setIgn2((unit.value(17)/5));
-    m_dashboard->setIgn3((unit.value(18)/5));
-    m_dashboard->setIgn4((unit.value(19)/5));
-    m_dashboard->setTRIM((unit.value(20)));
+    m_dashBoard->setInj1((unit.value(12)/3)*2);
+    m_dashBoard->setInj2((unit.value(13)/3)*2);
+    m_dashBoard->setInj3((unit.value(14)/3)*2);
+    m_dashBoard->setInj4((unit.value(15)/3)*2);
+    m_dashBoard->setIgn1((unit.value(16)/5));
+    m_dashBoard->setIgn2((unit.value(17)/5));
+    m_dashBoard->setIgn3((unit.value(18)/5));
+    m_dashBoard->setIgn4((unit.value(19)/5));
+    m_dashBoard->setTRIM((unit.value(20)));
 
 
     // Convert absolute pressure in KPA to relative pressure mmhg/Kg/cm2
@@ -139,7 +140,7 @@ void DecoderAdaptronic::decodeAdaptronic(QModbusDataUnit unit)
         }
 
 
-    m_dashboard->setpim(realBoost);
+    m_dashBoard->setpim(realBoost);
 
 
     //Datalogger Adaptronic Comma seperated Text File for easy import to Excel

@@ -76,7 +76,6 @@ Serial::Serial(QObject *parent) :
     QObject(parent),
     m_serialport(Q_NULLPTR),
     m_decoderapexi(Q_NULLPTR),
-    m_decoderadaptronic(Q_NULLPTR),
     m_dashBoard(Q_NULLPTR),
     m_gopro(Q_NULLPTR),
     m_gps(Q_NULLPTR),
@@ -89,24 +88,27 @@ Serial::Serial(QObject *parent) :
 
     getPorts();
     m_dashBoard = new DashBoard(this);
-    m_appSettings = new AppSettings(this);
+    //m_appSettings = new AppSettings(this);
     m_gopro = new GoPro(this);
-    m_gps = new GPS(m_dashBoard, this);
-    m_obd = new SerialOBD(m_dashBoard, this);
-    m_apexicom = new ApexiCom(this);
-    m_adaptroniccom = new AdaptronicCom(this);
-    m_nissanconsultcom = new NissanconsultCom(this);
-    QQmlApplicationEngine *engine = dynamic_cast<QQmlApplicationEngine*>( parent );
-    if (engine == Q_NULLPTR)
+    //m_gps = new GPS(m_dashBoard, this);
+    //m_obd = new SerialOBD(m_dashBoard, this);
+    //m_nissanconsultcom = new NissanconsultCom(this);
+    QQmlApplicationEngine *engine = dynamic_cast<QQmlApplicationEngine*>(parent);
+    if (engine == Q_NULLPTR){
+        qDebug() << "engine is NULL from serial class";
         return;
+    }
+
+
     engine->rootContext()->setContextProperty("Dashboard", m_dashBoard);
-    engine->rootContext()->setContextProperty("DecoderApexi", m_decoderapexi);
-    engine->rootContext()->setContextProperty("DecoderAdaptronic", m_decoderadaptronic);
-    engine->rootContext()->setContextProperty("AppSettings", m_appSettings);
-    engine->rootContext()->setContextProperty("GoPro", m_gopro);
-    engine->rootContext()->setContextProperty("GPS", m_gps);
-    engine->rootContext()->setContextProperty("OBD", m_obd);
-    engine->rootContext()->setContextProperty("ApexiCom", m_apexicom);
+
+
+    //engine->rootContext()->setContextProperty("DecoderApexi", m_decoderapexi);
+    //engine->rootContext()->setContextProperty("AppSettings", m_appSettings);
+    //engine->rootContext()->setContextProperty("GoPro", m_gopro);
+    //engine->rootContext()->setContextProperty("GPS", m_gps);
+    //engine->rootContext()->setContextProperty("OBD", m_obd);
+    //engine->rootContext()->setContextProperty("ApexiCom", m_apexicom);
     engine->rootContext()->setContextProperty("AdaptronicCom", m_adaptroniccom);
 }
 
@@ -164,6 +166,9 @@ void Serial::openConnection(const QString &portName, const int &ecuSelect, const
     //Apexi
     if (ecuSelect == 0)
     {
+       if(m_apexicom == Q_NULLPTR){
+       m_apexicom = new ApexiCom(this);
+        }
        m_apexicom->openConnection(portName);
 
     }
@@ -172,6 +177,9 @@ void Serial::openConnection(const QString &portName, const int &ecuSelect, const
     //Adaptronic
     if (ecuSelect == 1)
     {
+        if(m_adaptroniccom == Q_NULLPTR){
+        m_adaptroniccom = new AdaptronicCom(m_dashBoard, this);
+        }
         m_adaptroniccom->openConnection(portName);
 
     }
@@ -198,14 +206,14 @@ void Serial::openConnection(const QString &portName, const int &ecuSelect, const
         m_serialport->setStopBits(QSerialPort::OneStop);
         m_serialport->setFlowControl(QSerialPort::NoFlowControl);
 
-        if(m_serialport->open(QIODevice::ReadWrite) == false)
+        /*if(m_serialport->open(QIODevice::ReadWrite) == false)
         {
             m_dashBoard->setSerialStat(m_serialport->errorString());
         }
         else
         {
             m_dashBoard->setSerialStat(QString("Connected to Serialport"));
-        }
+        }*/
     }
 
 }
