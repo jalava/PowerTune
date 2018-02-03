@@ -33,6 +33,7 @@ class AppSettings;
 class GoPro;
 class GPS;
 class SerialOBD;
+class SerialCarberry;
 class QModbusClient;
 class QModbusReply;
 
@@ -78,6 +79,8 @@ private:
     GoPro *m_gopro;
     GPS *m_gps;
     SerialOBD *m_obd;
+    SerialCarberry *m_carberry;
+
     QStringList m_portsNames;
     QStringList *m_ecuList;
     qint64      m_bytesWritten;

@@ -90,6 +90,16 @@ void AppSettings::setLogging(const int &arg)
     setValue("serial/Logging", arg);
 }
 
+int AppSettings::getCANPort()
+{
+    return getValue("serial/CANPort").toInt();
+}
+
+void AppSettings::setCANPort(const int &arg)
+{
+    setValue("serial/CANPort", arg);
+}
+
 void AppSettings::setValue(const QString &key, const QVariant &value)
 {
     QSettings settings("PowerTuneQML", "PowerTuneQMLGUI", this);

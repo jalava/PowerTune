@@ -33,6 +33,8 @@ public:
     Q_INVOKABLE int getLogging();
     Q_INVOKABLE void setLogging(const int &arg);
 
+    Q_INVOKABLE int getCANPort();
+    Q_INVOKABLE void setCANPort(const int &arg);
 
 
 private:

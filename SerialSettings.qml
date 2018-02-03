@@ -102,21 +102,37 @@ Rectangle {
                     width: 200
 
                     //model: [ "PowerFC", "Adaptronic"]
-                    model: [ "PowerFC", "Adaptronic", "OBD ELM" , "Nissan Consult"]
+                    model: [ "PowerFC", "Adaptronic", "OBD ELM" , "Nissan Consult", "Carberry"]
                     property bool initialized: false
                     onCurrentIndexChanged: if (initialized) AppSettings.setECU( currentIndex )
                     Component.onCompleted: { currentIndex = AppSettings.getECU(); initialized = true }
                 }
 
                 Text {
+                    id: textcanChannelSelect
+                    visible: { (ecuSelect.currentIndex == 4) ? true : false; }
+                    text: "RX CAN Port"
+                }
+
+                ComboBox {
+                    id: canChannelSelect
+                    visible: { (ecuSelect.currentIndex == 4) ? true : false; }
+                    width: 200
+                    model: ["CAN1","CAN2"]
+                    property bool initialized: false
+                    onCurrentIndexChanged: if (initialized) AppSettings.setCANPort( currentIndex )
+                    Component.onCompleted: { currentIndex = AppSettings.getCANPort(); initialized = true }
+                }
+
+                Text {
                     id: textloggingSelect
-                    visible: { (ecuSelect.currentIndex >= "1") ? false: true; }
+                    visible: { (ecuSelect.currentIndex >= 1) ? false: true; }
                     text: "Log Raw Messages:"
 
                 }
                 ComboBox {
                     id: loggerSelect
-                    visible: { (ecuSelect.currentIndex >= "1") ? false: true; }
+                    visible: { (ecuSelect.currentIndex >= 1) ? false: true; }
                     width: 200
                     model: [ "OFF", "ON"]
                     property bool initialized: false
@@ -245,7 +261,7 @@ Rectangle {
                     text: Dashboard.RunStat
                 }
                 Grid {
-                    visible: { (ecuSelect.currentIndex >= "1") ? false: true; }
+                    visible: { (ecuSelect.currentIndex >= 1) ? false: true; }
                     rows: 10
                     columns: 4
                     spacing: 5
@@ -410,7 +426,7 @@ Rectangle {
         id: functconnect
         function connectfunc()
         {
-            if (ecuSelect.currentIndex == 2) Serial.openConnection(serialName.currentText, ecuSelect.currentIndex, loggerSelect.currentIndex,logger.datalogger()),Work.start(serialName.currentText);
+            if (ecuSelect.currentIndex >= 1) Serial.openConnection(serialName.currentText, ecuSelect.currentIndex, loggerSelect.currentIndex,logger.datalogger()),Work.start(serialName.currentText);
             else Serial.openConnection(serialName.currentText, ecuSelect.currentIndex, loggerSelect.currentIndex,logger.datalogger()),Serial.Auxcalc(unitaux1.text,an1V0.text,an2V5.text,unitaux2.text,an3V0.text,an4V5.text);
         }
     }
