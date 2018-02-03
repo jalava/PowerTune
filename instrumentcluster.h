@@ -24,7 +24,8 @@ public:
         thread = new QThread;
         OBD->moveToThread(thread);
 
-        connect(this,SIGNAL(start()),OBD,SLOT(ConnectToSerialPort()));
+        //Disabled until I figure out why this causes race condition
+        //connect(this,SIGNAL(start()),OBD,SLOT(ConnectToSerialPort()));
 
         //connect signals in OBD object to this object, to report to QML
         connect(OBD,SIGNAL(obdRPM(int)),this,SIGNAL(obdRPM(int)));

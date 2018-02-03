@@ -20,8 +20,8 @@
 
 #include "serial.h"
 #include "serialobd.h"
-#include "serialcarberry.h"
 #include "nissanconsultcom.h"
+#include "serialcarberry.h"
 #include "decoder.h"
 #include "dashboard.h"
 #include "serialport.h"
@@ -78,6 +78,7 @@ Serial::Serial(QObject *parent) :
     m_gps(Q_NULLPTR),
     m_obd(Q_NULLPTR),
     m_nissanconsultcom(Q_NULLPTR),
+    m_carberry(Q_NULLPTR),
     m_bytesWritten(0),
     lastRequest(nullptr),
     modbusDevice(nullptr)
@@ -106,6 +107,7 @@ Serial::Serial(QObject *parent) :
     engine->rootContext()->setContextProperty("GPS", m_gps);
     engine->rootContext()->setContextProperty("NissanconsultCom", m_nissanconsultcom);
     engine->rootContext()->setContextProperty("OBD", m_obd);
+    engine->rootContext()->setContextProperty("Carberry", m_carberry);
 }
 
 void Serial::initSerialPort()
@@ -155,8 +157,9 @@ void Serial::clear() const
 
 
 //function to open serial port
-void Serial::openConnection(const QString &portName, const int &ecuSelect, const int &interfaceSelect, const int &loggingSelect)
+void Serial::openConnection(const QString &portName, const int &ecuSelect, const int &interfaceSelect, const int &loggingSelect, const QString &canPortName)
 {
+    qDebug("OPEN CONNECTION!");
     ecu = ecuSelect;
     interface = interfaceSelect;
     logging = loggingSelect;
@@ -165,7 +168,6 @@ void Serial::openConnection(const QString &portName, const int &ecuSelect, const
     //Apexi
     if (ecuSelect == 0)
     {
-
         initSerialPort();
         m_serialport->setPortName(portName);
         m_serialport->setBaudRate(QSerialPort::Baud57600);
@@ -229,7 +231,14 @@ void Serial::openConnection(const QString &portName, const int &ecuSelect, const
         m_nissanconsultcom->openConnection(portName);
 
     }
+
+    if (ecuSelect == 4) {
+        m_carberry->SelectCANPort(canPortName);
+        //m_carberry->SelectPort(portName);
+        m_carberry->openConnection(portName);
+    }
     //Dicktator
+
     if (ecuSelect == 5)
     {
 
@@ -250,7 +259,6 @@ void Serial::openConnection(const QString &portName, const int &ecuSelect, const
             m_dashBoard->setSerialStat(QString("Connected to Serialport"));
         }
     }
-
 }
 void Serial::closeConnection()
 {

@@ -36,6 +36,9 @@ public:
     Q_INVOKABLE int getCANPort();
     Q_INVOKABLE void setCANPort(const int &arg);
 
+    Q_INVOKABLE int getCANProfile();
+    Q_INVOKABLE void setCANProfile(const int &arg);
+
 
 private:
     void setValue(const QString &key, const QVariant &value);

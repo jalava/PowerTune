@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     gopro.cpp \
     gps.cpp \
     serialobd.cpp \
-    nissanconsultcom.cpp
+    nissanconsultcom.cpp \
+    serialcarberry.cpp
 
 
 RESOURCES += qml.qrc
@@ -39,11 +40,12 @@ HEADERS += \
     instrumentcluster.h \
     pids.h \
     serialobd.h \
-    nissanconsultcom.h
+    nissanconsultcom.h \
+    serialcarberry.h
 
 
 FORMS +=
 
 DISTFILES += \
-
+    qtlogging.ini
 

@@ -100,6 +100,17 @@ void AppSettings::setCANPort(const int &arg)
     setValue("serial/CANPort", arg);
 }
 
+
+int AppSettings::getCANProfile()
+{
+    return getValue("serial/CANProfile").toInt();
+}
+
+void AppSettings::setCANProfile(const int &arg)
+{
+    setValue("serial/CANProfile", arg);
+}
+
 void AppSettings::setValue(const QString &key, const QVariant &value)
 {
     QSettings settings("PowerTuneQML", "PowerTuneQMLGUI", this);

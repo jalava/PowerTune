@@ -111,17 +111,33 @@ Rectangle {
                 Text {
                     id: textcanChannelSelect
                     visible: { (ecuSelect.currentIndex == 4) ? true : false; }
-                    text: "RX CAN Port"
+                    text: "CAN Port:"
                 }
 
                 ComboBox {
                     id: canChannelSelect
                     visible: { (ecuSelect.currentIndex == 4) ? true : false; }
                     width: 200
-                    model: ["CAN1","CAN2"]
+                    model: ["CH1","CH2"]
                     property bool initialized: false
                     onCurrentIndexChanged: if (initialized) AppSettings.setCANPort( currentIndex )
                     Component.onCompleted: { currentIndex = AppSettings.getCANPort(); initialized = true }
+                }
+
+                Text {
+                    id: textcanProfileSelect
+                    visible: { (ecuSelect.currentIndex == 4) ? true : false; }
+                    text: "CAN Profile:"
+                }
+
+                ComboBox {
+                    id: canSelect
+                    visible: { (ecuSelect.currentIndex == 4) ? true : false; }
+                    width: 200
+                    model: ["Adaptronic CAN"]
+                    property bool initialized: false
+                    onCurrentIndexChanged: if (initialized) AppSettings.setCANProfile( currentIndex )
+                    Component.onCompleted: { currentIndex = AppSettings.getCANProfile(); initialized = true }
                 }
 
                 Text {
@@ -426,8 +442,12 @@ Rectangle {
         id: functconnect
         function connectfunc()
         {
-            if (ecuSelect.currentIndex >= 1) Serial.openConnection(serialName.currentText, ecuSelect.currentIndex, loggerSelect.currentIndex,logger.datalogger()),Work.start(serialName.currentText);
-            else Serial.openConnection(serialName.currentText, ecuSelect.currentIndex, loggerSelect.currentIndex,logger.datalogger()),Serial.Auxcalc(unitaux1.text,an1V0.text,an2V5.text,unitaux2.text,an3V0.text,an4V5.text);
+            if (ecuSelect.currentIndex >= 1) {
+                Serial.openConnection(serialName.currentText, ecuSelect.currentIndex, loggerSelect.currentIndex,logger.datalogger(), canChannelSelect.currentText),Work.start(serialName.currentText);
+            }
+            else {
+                Serial.openConnection(serialName.currentText, ecuSelect.currentIndex, loggerSelect.currentIndex,logger.datalogger(), canChannelSelect.currentText),Serial.Auxcalc(unitaux1.text,an1V0.text,an2V5.text,unitaux2.text,an3V0.text,an4V5.text);
+            }
         }
     }
 
