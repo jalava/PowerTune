@@ -46,8 +46,8 @@ public slots:
 //    void RequestDTC();
 //    void RequestLiveData();
     void readyToRead();
-//    void ProcessRawMessage(const QByteArray &buffer);
-//    void ProcessMessage(QByteArray m_ECUResponsecomplete);
+    void ProcessRawMessage(const QByteArray &buffer);
+    void ProcessMessage(const QString &msg);
 
 
 };
